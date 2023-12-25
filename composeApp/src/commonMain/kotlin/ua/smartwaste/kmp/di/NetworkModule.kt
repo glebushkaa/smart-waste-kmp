@@ -8,9 +8,11 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.header
+import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMessageBuilder
 import io.ktor.http.URLProtocol
+import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.core.qualifier.named
@@ -40,8 +42,9 @@ val networkModule = module {
 
     single<HttpClient>(named(USER_HTTP_CLIENT)) {
         val authPreferences = get<AuthPreferences>()
-        buildHttpClient {
+        buildHttpClient(baseUrl = "$BASE_URL/self") {
             val token = authPreferences.token ?: ""
+            contentType(ContentType.Application.Json)
             header(HttpHeaders.Authorization, token)
         }
     }
