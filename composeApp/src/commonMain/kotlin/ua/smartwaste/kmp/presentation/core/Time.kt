@@ -5,6 +5,7 @@ package ua.smartwaste.kmp.presentation.core
  */
 
 const val TWO_HUNDRED_MILLIS = 200L
+const val FOUR_HUNDRED_MILLIS = 400L
 const val FIVE_HUNDRED_MILLIS = 500L
 const val SIX_HUNDRED_MILLIS = 600L
 const val EIGHT_HUNDRED_MILLIS = 800L

@@ -14,4 +14,4 @@ data class LoginState(
     val password: String = "",
     val username: String = "",
     val loginTextFieldError: LoginTextFieldError? = null,
-) 
+)

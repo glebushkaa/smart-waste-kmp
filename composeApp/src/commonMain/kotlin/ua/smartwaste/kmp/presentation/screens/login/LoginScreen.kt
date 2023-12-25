@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalResourceApi::class)
-
 package ua.smartwaste.kmp.presentation.screens.login
 
 import androidx.compose.animation.AnimatedVisibility
@@ -51,9 +49,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 import ua.smartwaste.kmp.presentation.components.SmartButton
+import ua.smartwaste.kmp.presentation.core.EIGHT_HUNDRED_MILLIS
+import ua.smartwaste.kmp.presentation.core.FOUR_HUNDRED_MILLIS
+import ua.smartwaste.kmp.presentation.core.ResourceType
 import ua.smartwaste.kmp.presentation.core.painterDrawableResource
 import ua.smartwaste.kmp.presentation.theme.SmartTheme
 
@@ -67,17 +66,21 @@ class LoginScreen : Screen {
     override fun Content() {
         val screenModel = getScreenModel<LoginScreenModel>()
         val state by screenModel.state.collectAsState()
+
+        LoginScreenContent(
+            state = state,
+            sendEvent = screenModel::sendEvent,
+        )
     }
 }
 
 @Composable
 private fun LoginScreenContent(
-    modifier: Modifier = Modifier,
     state: LoginState = LoginState(),
     sendEvent: (LoginEvent) -> Unit = {},
 ) {
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(SmartTheme.palette.background)
             .padding(horizontal = SmartTheme.offset.width.large),
@@ -132,7 +135,7 @@ private fun AppTitle(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
-            painter = painterDrawableResource("img_book"),
+            painter = painterDrawableResource("img_recycle"),
             contentDescription = null,
             modifier = Modifier.size(
                 SmartTheme.dimension.login.topLogoSize,
@@ -191,11 +194,15 @@ private fun LoginFields(
     }
     val animatedPadding by animateDpAsState(
         targetValue = padding,
-        animationSpec = tween(400),
+        animationSpec = tween(FOUR_HUNDRED_MILLIS.toInt()),
     )
     val animatedUsernameFieldHeight by animateDpAsState(
         targetValue = usernameFieldHeight,
-        animationSpec = if (screenType == LoginMode.REGISTER) tween(400) else tween(800),
+        animationSpec = if (screenType == LoginMode.REGISTER) {
+            tween(FOUR_HUNDRED_MILLIS.toInt())
+        } else {
+            tween(EIGHT_HUNDRED_MILLIS.toInt())
+        },
     )
 
     Column(
@@ -209,16 +216,12 @@ private fun LoginFields(
         AppTitle(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(
-                    top = SmartTheme.offset.height.large,
-                ),
+                .padding(top = SmartTheme.offset.height.large),
         )
         LoginHeader(
             modifier = Modifier
                 .align(Alignment.Start)
-                .padding(
-                    top = SmartTheme.offset.height.large,
-                ),
+                .padding(top = SmartTheme.offset.height.large),
             screenType = screenType,
         )
         AnimatedVisibility(
@@ -226,15 +229,15 @@ private fun LoginFields(
             visible = screenType == LoginMode.REGISTER,
             enter = slideInHorizontally(
                 initialOffsetX = { 2 * it },
-                animationSpec = tween(800),
+                animationSpec = tween(EIGHT_HUNDRED_MILLIS.toInt()),
             ) + fadeIn(
-                animationSpec = tween(400),
+                animationSpec = tween(FOUR_HUNDRED_MILLIS.toInt()),
             ),
             exit = slideOutHorizontally(
                 targetOffsetX = { 2 * it },
-                animationSpec = tween(800),
+                animationSpec = tween(EIGHT_HUNDRED_MILLIS.toInt()),
             ) + fadeOut(
-                animationSpec = tween(400),
+                animationSpec = tween(FOUR_HUNDRED_MILLIS.toInt()),
             ),
         ) {
             LoginTextField(
@@ -305,15 +308,12 @@ fun LoginTextField(
         },
         trailingIcon = {
             if (keyboardType != KeyboardType.Password) return@OutlinedTextField
-            val imageRes = if (textHidden) {
-                "drawable/ic_visibility_off.xml"
-            } else {
-                "drawable/ic_visibility.xml"
-            }
-
             IconButton(onClick = { textHidden = !textHidden }) {
                 Icon(
-                    painter = painterResource(imageRes),
+                    painter = painterDrawableResource(
+                        id = if (textHidden) "ic_visibility_off" else "ic_visibility",
+                        type = ResourceType.XML,
+                    ),
                     contentDescription = null,
                     tint = SmartTheme.palette.onSurface,
                 )
@@ -343,7 +343,6 @@ private fun BottomLoginButtons(
     screenType: LoginMode,
     loginButtonEnabled: Boolean,
     onLoginClick: () -> Unit = {},
-    onGetUserClicked: () -> Unit = {},
     onChangeScreenTypeClick: () -> Unit = {},
 ) {
     val buttonText = when (screenType) {
@@ -352,30 +351,30 @@ private fun BottomLoginButtons(
     }
     val loginText = buildLoginText(screenType)
 
-    SmartButton(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(
-                SmartTheme.dimension.login.buttonHeight,
-            ),
-        enabled = loginButtonEnabled,
-        shape = SmartTheme.shape.small,
-        onClick = onLoginClick,
-        content = {
-            Text(
-                text = buttonText,
-                style = SmartTheme.typography.headlineSmall.copy(
-                    fontWeight = FontWeight.ExtraBold,
-                ),
-                color = SmartTheme.palette.onPrimary,
-            )
-        },
-    )
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        SmartButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(
+                    SmartTheme.dimension.login.buttonHeight,
+                ),
+            enabled = loginButtonEnabled,
+            shape = SmartTheme.shape.small,
+            onClick = onLoginClick,
+            content = {
+                Text(
+                    text = buttonText,
+                    style = SmartTheme.typography.headlineSmall.copy(
+                        fontWeight = FontWeight.ExtraBold,
+                    ),
+                    color = SmartTheme.palette.onPrimary,
+                )
+            },
+        )
         ClickableText(
             modifier = Modifier
                 .padding(

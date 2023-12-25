@@ -17,4 +17,4 @@ sealed class LoginEvent {
         val field: LoginTextFieldType,
         val message: String,
     ) : LoginEvent()
-} 
+}

@@ -8,4 +8,5 @@ val modules = mutableListOf(
     networkModule,
     repositoryModule,
     preferencesModule,
+    screenModelModule,
 )
