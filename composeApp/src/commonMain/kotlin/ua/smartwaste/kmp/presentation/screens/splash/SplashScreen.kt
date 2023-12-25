@@ -1,7 +1,9 @@
 package ua.smartwaste.kmp.presentation.screens.splash
 
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,35 +14,44 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import kotlinx.coroutines.delay
 import ua.smartwaste.kmp.presentation.core.EIGHT_HUNDRED_MILLIS
+import ua.smartwaste.kmp.presentation.core.FIVE_HUNDRED_MILLIS
+import ua.smartwaste.kmp.presentation.core.ONE_SECOND
+import ua.smartwaste.kmp.presentation.core.TWO_HUNDRED_MILLIS
+import ua.smartwaste.kmp.presentation.core.TWO_SECOND
 import ua.smartwaste.kmp.presentation.core.painterDrawableResource
+import ua.smartwaste.kmp.presentation.screens.map.MapScreen
 import ua.smartwaste.kmp.presentation.theme.SmartTheme
 
 /**
  * Created by gle.bushkaa email(gleb.mokryy@gmail.com) on 12/24/2023
  */
 
+class SplashScreen : Screen {
+
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        SplashScreenContent {
+            navigator.push(MapScreen())
+        }
+    }
+}
+
 @Composable
-fun SplashScreen() {
-    var logoAlpha by remember { mutableFloatStateOf(LOGO_START_ALPHA) }
-    val animatedLogoAlpha by animateFloatAsState(
-        animationSpec = tween(EIGHT_HUNDRED_MILLIS.toInt()),
-        targetValue = logoAlpha,
-        label = "",
-    )
-    var logoScale by remember { mutableFloatStateOf(LOGO_START_SCALE) }
-    val animatedLogoScale by animateFloatAsState(
-        animationSpec = tween(EIGHT_HUNDRED_MILLIS.toInt()),
-        targetValue = logoScale,
-        label = "",
-    )
+private fun SplashScreenContent(
+    homeNavigate: () -> Unit = {},
+) {
+    var logoVisible by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -49,37 +60,47 @@ fun SplashScreen() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Image(
-            modifier = Modifier
-                .size(SmartTheme.dimension.splash.logo)
-                .graphicsLayer {
-                    alpha = animatedLogoAlpha
-                    scaleX = animatedLogoScale
-                    scaleY = animatedLogoScale
-                },
-            painter = painterDrawableResource("img_recycle"),
-            contentDescription = null,
-        )
-        Text(
-            modifier = Modifier.graphicsLayer {
-                alpha = animatedLogoAlpha
-                scaleX = animatedLogoScale
-                scaleY = animatedLogoScale
-            },
-            text = "Smart Waste",
-            style = SmartTheme.typography.headlineMedium,
-            color = SmartTheme.palette.onBackground,
-        )
+        AnimatedVisibility(
+            visible = logoVisible,
+            enter = fadeIn(
+                animationSpec = tween(EIGHT_HUNDRED_MILLIS.toInt()),
+                initialAlpha = LOGO_START_ALPHA,
+            ) + scaleIn(
+                animationSpec = tween(FIVE_HUNDRED_MILLIS.toInt()),
+                initialScale = LOGO_START_SCALE,
+            ),
+        ) {
+            Image(
+                modifier = Modifier.size(SmartTheme.dimension.splash.logo),
+                painter = painterDrawableResource("img_recycle"),
+                contentDescription = null,
+            )
+        }
+        AnimatedVisibility(
+            visible = logoVisible,
+            enter = fadeIn(
+                animationSpec = tween(EIGHT_HUNDRED_MILLIS.toInt()),
+                initialAlpha = LOGO_START_ALPHA,
+            ) + scaleIn(
+                animationSpec = tween(FIVE_HUNDRED_MILLIS.toInt()),
+                initialScale = LOGO_START_SCALE,
+            ),
+        ) {
+            Text(
+                text = "Smart Waste",
+                style = SmartTheme.typography.headlineMedium,
+                color = SmartTheme.palette.onBackground,
+            )
+        }
     }
 
-    LaunchedEffect(key1 = Unit) {
-        logoAlpha = LOGO_END_ALPHA
-        logoScale = LOGO_END_SCALE
+    LaunchedEffect(Unit) {
+        delay(EIGHT_HUNDRED_MILLIS)
+        logoVisible = true
+        delay(TWO_SECOND)
+        homeNavigate()
     }
 }
 
 private const val LOGO_START_SCALE = 0.3f
-private const val LOGO_END_SCALE = 1f
-
 private const val LOGO_START_ALPHA = 0f
-private const val LOGO_END_ALPHA = 1f

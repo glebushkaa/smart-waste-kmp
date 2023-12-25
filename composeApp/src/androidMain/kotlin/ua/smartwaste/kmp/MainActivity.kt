@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import ua.smartwaste.kmp.presentation.App
-import ua.smartwaste.kmp.presentation.screens.splash.SplashScreen
 import ua.smartwaste.kmp.presentation.theme.SmartTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,7 +14,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SmartTheme {
-                SplashScreen()
+                window.statusBarColor = SmartTheme.palette.background.toArgb()
+                window.navigationBarColor = SmartTheme.palette.background.toArgb()
+                App()
             }
         }
     }
