@@ -4,8 +4,8 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import ua.smartwaste.kmp.network.api.user.UserApi
-import ua.smartwaste.kmp.network.api.user.model.Quest
 import ua.smartwaste.kmp.network.api.user.model.NetworkUser
+import ua.smartwaste.kmp.network.api.user.model.Quest
 import ua.smartwaste.kmp.network.impl.mapper.toUser
 import ua.smartwaste.kmp.network.impl.user.dto.NetworkUserDto
 
@@ -18,7 +18,7 @@ class UserApiImpl(
 ) : UserApi {
 
     override suspend fun getUser(): NetworkUser {
-        return userHttpClient.get("")
+        return userHttpClient.get("self")
             .call
             .body<NetworkUserDto>()
             .toUser()

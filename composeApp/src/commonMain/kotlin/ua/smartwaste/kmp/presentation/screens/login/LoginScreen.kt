@@ -63,7 +63,7 @@ import ua.smartwaste.kmp.presentation.theme.SmartTheme
  * Created by gle.bushkaa email(gleb.mokryy@gmail.com) on 12/25/2023
  */
 
-class LoginScreen : Screen {
+object LoginScreen : Screen {
 
     @Composable
     override fun Content() {

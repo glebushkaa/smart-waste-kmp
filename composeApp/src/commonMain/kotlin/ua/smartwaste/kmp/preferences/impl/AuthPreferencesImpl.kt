@@ -18,6 +18,10 @@ class AuthPreferencesImpl(
         authSettings.putString(TOKEN_KEY, token)
     }
 
+    override fun removeToken() {
+        authSettings.remove(TOKEN_KEY)
+    }
+
     private companion object {
         private const val TOKEN_KEY = "token-key"
     }

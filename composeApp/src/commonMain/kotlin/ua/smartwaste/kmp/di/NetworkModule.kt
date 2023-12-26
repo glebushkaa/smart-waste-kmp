@@ -11,8 +11,10 @@ import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMessageBuilder
+import io.ktor.http.URLBuilder
 import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
+import io.ktor.http.encodedPath
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.core.qualifier.named
@@ -34,7 +36,7 @@ private const val BASE_URL = "smartwaste-api.azurewebsites.net"
 
 val networkModule = module {
     single<HttpClient>(named(AUTH_HTTP_CLIENT)) {
-        buildHttpClient(baseUrl = "$BASE_URL/auth") {
+        buildHttpClient(additionalPath = "auth") {
             contentType(ContentType.Application.Json)
         }
     }
@@ -44,7 +46,7 @@ val networkModule = module {
 
     single<HttpClient>(named(USER_HTTP_CLIENT)) {
         val authPreferences = get<AuthPreferences>()
-        buildHttpClient(baseUrl = "$BASE_URL/self") {
+        buildHttpClient {
             val token = authPreferences.token ?: ""
             contentType(ContentType.Application.Json)
             header(HttpHeaders.Authorization, token)
@@ -58,13 +60,17 @@ val networkModule = module {
 
 private fun buildHttpClient(
     baseUrl: String = BASE_URL,
+    additionalPath: String? = null,
     httpMessageBuilder: HttpMessageBuilder.() -> Unit = {},
 ): HttpClient {
     return HttpClient {
         expectSuccess = true
         defaultRequest {
-            host = baseUrl
-            url { protocol = URLProtocol.HTTPS }
+            url {
+                protocol = URLProtocol.HTTPS
+                host = baseUrl
+                additionalPath?.let { encodedPath = makeFullPath(it) }
+            }
             httpMessageBuilder()
         }
         install(Logging) {
@@ -79,5 +85,23 @@ private fun buildHttpClient(
                 },
             )
         }
+    }
+}
+
+private fun URLBuilder.makeFullPath(path: String): String {
+    val formattedBasePath = path.let {
+        var formattedPath = it
+        if (!path.startsWith("/")) {
+            formattedPath = "/$path"
+        }
+        if (path.endsWith("/")) {
+            formattedPath = path.dropLast(1)
+        }
+        formattedPath
+    }
+    return if (encodedPath.startsWith("/")) {
+        formattedBasePath + encodedPath
+    } else {
+        "$formattedBasePath/$encodedPath"
     }
 }

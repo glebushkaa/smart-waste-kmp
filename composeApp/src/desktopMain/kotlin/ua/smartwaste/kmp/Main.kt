@@ -1,9 +1,10 @@
 package ua.smartwaste.kmp
 
 import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
+import io.github.aakira.napier.DebugAntilog
+import io.github.aakira.napier.Napier
 import org.koin.core.context.startKoin
 import ua.smartwaste.kmp.di.modules
 import ua.smartwaste.kmp.presentation.App
@@ -16,6 +17,7 @@ import java.awt.Dimension
 
 fun main() {
     startKoin { modules(modules = modules) }
+    Napier.base(DebugAntilog())
     application {
         val minSize = Dimension(400, 800)
 
@@ -23,9 +25,7 @@ fun main() {
             title = "SmartWaste",
             icon = painterDrawableResource("img_recycle"),
             onCloseRequest = ::exitApplication,
-            state = WindowState(
-                placement = WindowPlacement.Fullscreen,
-            ),
+            state = WindowState(),
         ) {
             window.minimumSize = minSize
             App()

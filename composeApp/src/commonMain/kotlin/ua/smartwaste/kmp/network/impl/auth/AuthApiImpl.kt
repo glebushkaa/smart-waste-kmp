@@ -38,16 +38,12 @@ class AuthApiImpl(
         email: String,
         password: String,
     ): AuthResponse {
-        val registerDto = RegisterDto(
-            username = username,
-            email = email,
-            password = password,
-        )
+        val registerDto = RegisterDto(username = username, email = email, password = password)
         return authHttpClient.post {
             url {
                 path("signup")
                 setBody(registerDto)
             }
-        }.call.body<AuthResponse>()
+        }.call.body<AuthResponseDto>().toAuthResponse()
     }
 }

@@ -9,4 +9,6 @@ interface AuthPreferences {
     val token: String?
 
     fun setToken(token: String)
+
+    fun removeToken()
 }

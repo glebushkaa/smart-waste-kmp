@@ -51,7 +51,7 @@ class SplashScreen : Screen {
             val event = navigationEvent ?: return@LaunchedEffect
             when (event) {
                 SplashNavigationEvent.NavigateToLogin -> {
-                    navigator?.replaceAll(LoginScreen())
+                    navigator?.replaceAll(LoginScreen)
                 }
 
                 SplashNavigationEvent.NavigateToProfile -> {
