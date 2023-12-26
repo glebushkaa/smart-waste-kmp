@@ -59,6 +59,7 @@ private fun buildHttpClient(
     httpMessageBuilder: HttpMessageBuilder.() -> Unit = {},
 ): HttpClient {
     return HttpClient {
+        expectSuccess = true
         defaultRequest {
             host = baseUrl
             url { protocol = URLProtocol.HTTPS }

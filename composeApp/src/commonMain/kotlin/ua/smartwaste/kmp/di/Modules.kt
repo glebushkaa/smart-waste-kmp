@@ -9,4 +9,5 @@ val modules = mutableListOf(
     repositoryModule,
     preferencesModule,
     screenModelModule,
+    useCaseModule,
 )

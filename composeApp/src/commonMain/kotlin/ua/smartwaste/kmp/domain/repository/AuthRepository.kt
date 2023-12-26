@@ -6,7 +6,13 @@ package ua.smartwaste.kmp.domain.repository
 
 interface AuthRepository {
 
-    suspend fun login(email: String, password: String)
+    /**
+     * @return token
+     */
+    suspend fun login(email: String, password: String): String
 
-    suspend fun register(username: String, email: String, password: String)
+    /**
+     * @return token
+     */
+    suspend fun register(username: String, email: String, password: String): String
 }

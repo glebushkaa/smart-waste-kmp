@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,13 +21,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import kotlinx.coroutines.delay
 import ua.smartwaste.kmp.presentation.core.EIGHT_HUNDRED_MILLIS
 import ua.smartwaste.kmp.presentation.core.FIVE_HUNDRED_MILLIS
-import ua.smartwaste.kmp.presentation.core.TWO_SECOND
 import ua.smartwaste.kmp.presentation.core.painterDrawableResource
 import ua.smartwaste.kmp.presentation.screens.login.LoginScreen
+import ua.smartwaste.kmp.presentation.screens.profile.ProfileScreen
 import ua.smartwaste.kmp.presentation.theme.SmartTheme
 
 /**
@@ -37,16 +39,32 @@ class SplashScreen : Screen {
 
     @Composable
     override fun Content() {
+        val screenModel = getScreenModel<SplashScreenModel>()
+        val navigationEvent by screenModel.navigationEvent.collectAsState(null)
         val navigator = LocalNavigator.current
-        SplashScreenContent {
-            navigator?.replaceAll(LoginScreen())
+
+        SplashScreenContent(
+            sendEvent = screenModel::sendEvent,
+        )
+
+        LaunchedEffect(key1 = navigationEvent) {
+            val event = navigationEvent ?: return@LaunchedEffect
+            when (event) {
+                SplashNavigationEvent.NavigateToLogin -> {
+                    navigator?.replaceAll(LoginScreen())
+                }
+
+                SplashNavigationEvent.NavigateToProfile -> {
+                    navigator?.replaceAll(ProfileScreen)
+                }
+            }
         }
     }
 }
 
 @Composable
 private fun SplashScreenContent(
-    homeNavigate: () -> Unit = {},
+    sendEvent: (SplashEvent) -> Unit = {},
 ) {
     var logoVisible by remember { mutableStateOf(false) }
 
@@ -94,8 +112,7 @@ private fun SplashScreenContent(
     LaunchedEffect(Unit) {
         delay(EIGHT_HUNDRED_MILLIS)
         logoVisible = true
-        delay(TWO_SECOND)
-        homeNavigate()
+        sendEvent(SplashEvent.ValidateToken)
     }
 }
 
