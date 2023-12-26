@@ -2,18 +2,24 @@ package ua.smartwaste.kmp.presentation.screens.login
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ua.smartwaste.kmp.domain.repository.AuthRepository
+import ua.smartwaste.kmp.domain.usecase.auth.LoginUseCase
+import ua.smartwaste.kmp.domain.usecase.auth.RegisterUseCase
 
 /**
  * Created by gle.bushkaa email(gleb.mokryy@gmail.com) on 12/25/2023
  */
 
 class LoginScreenModel(
-    private val authRepository: AuthRepository,
+    private val loginUseCase: LoginUseCase,
+    private val registerUseCase: RegisterUseCase,
 ) : StateScreenModel<LoginState>(LoginState()) {
+
+    private val _navigationEvent = Channel<LoginNavigationEvent>()
+    val navigationEvent = _navigationEvent.receiveAsFlow()
 
     private fun swapLoginMode(): LoginMode {
         return when (state.value.loginMode) {
@@ -22,19 +28,25 @@ class LoginScreenModel(
         }
     }
 
-    private fun login() = screenModelScope.launch(Dispatchers.IO) {
-        authRepository.login(
+    private fun login() = screenModelScope.launch {
+        val params = LoginUseCase.Params(
             email = state.value.email,
             password = state.value.password,
         )
+        loginUseCase(params).onSuccess {
+            _navigationEvent.trySend(LoginNavigationEvent.NavigateToProfile)
+        }
     }
 
-    private fun register() = screenModelScope.launch(Dispatchers.IO) {
-        authRepository.register(
+    private fun register() = screenModelScope.launch {
+        val params = RegisterUseCase.Params(
             username = state.value.username,
             email = state.value.email,
             password = state.value.password,
         )
+        registerUseCase(params).onSuccess {
+            _navigationEvent.trySend(LoginNavigationEvent.NavigateToProfile)
+        }
     }
 
     private fun validateInput(
@@ -42,10 +54,10 @@ class LoginScreenModel(
         username: String = state.value.username,
         password: String = state.value.password,
         loginMode: LoginMode = state.value.loginMode,
-    ) = screenModelScope.launch(Dispatchers.IO) {
-        val isEmailValid = validateEmail(email)
-        val isUsernameValid = validateUsername(username)
-        val isPasswordValid = validatePassword(password)
+    ) {
+        val isEmailValid = LoginValidator.validateEmail(email)
+        val isUsernameValid = LoginValidator.validateUsername(username)
+        val isPasswordValid = LoginValidator.validatePassword(password)
         val signUpUsernameCheck = if (loginMode == LoginMode.REGISTER) isUsernameValid else true
         val isInputValid = isEmailValid && isPasswordValid && signUpUsernameCheck
         val event = if (isInputValid) {
@@ -54,22 +66,6 @@ class LoginScreenModel(
             LoginEvent.DisableLoginButton
         }
         sendEvent(event)
-    }
-
-    private fun validateEmail(email: String): Boolean {
-        val email = email.trim()
-        return email.contains("@") && email.length >= MIN_EMAIL_LENGTH
-    }
-
-    private fun validateUsername(username: String): Boolean {
-        val username = username.trim()
-        return username.length >= MIN_USERNAME_LENGTH &&
-            !username.contains("[!\"#$%&'()*+,-/:;\\\\<=>?@\\[\\]^`{|}~]".toRegex())
-    }
-
-    private fun validatePassword(password: String): Boolean {
-        val password = password.trim()
-        return password.length >= MIN_PASSWORD_LENGTH
     }
 
     fun sendEvent(event: LoginEvent) {
@@ -119,11 +115,5 @@ class LoginScreenModel(
                 }
             }
         }
-    }
-
-    private companion object {
-        const val MIN_EMAIL_LENGTH = 10
-        const val MIN_USERNAME_LENGTH = 4
-        const val MIN_PASSWORD_LENGTH = 8
     }
 }

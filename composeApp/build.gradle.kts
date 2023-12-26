@@ -64,6 +64,8 @@ kotlin {
             implementation(libs.bundles.ktor.multiplatform.jvm)
             implementation(compose.desktop.currentOs)
             implementation(compose.preview)
+
+            runtimeOnly(libs.kotlinx.coroutines.swing)
         }
     }
 }

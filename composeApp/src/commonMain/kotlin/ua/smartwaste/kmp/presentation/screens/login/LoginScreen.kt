@@ -30,6 +30,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -49,11 +50,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
 import ua.smartwaste.kmp.presentation.components.SmartButton
 import ua.smartwaste.kmp.presentation.core.EIGHT_HUNDRED_MILLIS
 import ua.smartwaste.kmp.presentation.core.FOUR_HUNDRED_MILLIS
 import ua.smartwaste.kmp.presentation.core.ResourceType
 import ua.smartwaste.kmp.presentation.core.painterDrawableResource
+import ua.smartwaste.kmp.presentation.screens.profile.ProfileScreen
 import ua.smartwaste.kmp.presentation.theme.SmartTheme
 
 /**
@@ -64,13 +67,24 @@ class LoginScreen : Screen {
 
     @Composable
     override fun Content() {
+        val navigator = LocalNavigator.current
         val screenModel = getScreenModel<LoginScreenModel>()
         val state by screenModel.state.collectAsState()
+        val navigationEvent by screenModel.navigationEvent.collectAsState(null)
 
         LoginScreenContent(
             state = state,
             sendEvent = screenModel::sendEvent,
         )
+
+        LaunchedEffect(navigationEvent) {
+            val event = navigationEvent ?: return@LaunchedEffect
+            when (event) {
+                LoginNavigationEvent.NavigateToProfile -> {
+                    navigator?.replaceAll(ProfileScreen)
+                }
+            }
+        }
     }
 }
 
@@ -116,7 +130,7 @@ private fun LoginScreenContent(
             screenType = state.loginMode,
             loginButtonEnabled = state.loginButtonEnabled,
             onLoginClick = {
-//                navigator.push(HomeScreen)
+                sendEvent(LoginEvent.LoginClicked)
             },
             onChangeScreenTypeClick = {
                 sendEvent(LoginEvent.SwapLoginMode)

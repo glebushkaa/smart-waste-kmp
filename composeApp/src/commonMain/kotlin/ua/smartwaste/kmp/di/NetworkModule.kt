@@ -34,7 +34,9 @@ private const val BASE_URL = "smartwaste-api.azurewebsites.net"
 
 val networkModule = module {
     single<HttpClient>(named(AUTH_HTTP_CLIENT)) {
-        buildHttpClient(baseUrl = "$BASE_URL/auth")
+        buildHttpClient(baseUrl = "$BASE_URL/auth") {
+            contentType(ContentType.Application.Json)
+        }
     }
     single<AuthApi> {
         AuthApiImpl(authHttpClient = get(named(AUTH_HTTP_CLIENT)))
