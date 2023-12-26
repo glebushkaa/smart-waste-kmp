@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalResourceApi::class)
+@file:OptIn(ExperimentalResourceApi::class, ExperimentalResourceApi::class)
 
 package ua.smartwaste.kmp.presentation.core
 
@@ -12,7 +12,7 @@ import org.jetbrains.compose.resources.painterResource
  */
 
 enum class ResourceType(val format: String) {
-    PNG(".png"), SVG(".svg")
+    PNG(".png"), XML(".xml")
 }
 
 @Composable

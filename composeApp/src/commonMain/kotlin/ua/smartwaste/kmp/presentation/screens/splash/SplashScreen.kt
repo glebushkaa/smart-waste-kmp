@@ -21,15 +21,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import kotlinx.coroutines.delay
 import ua.smartwaste.kmp.presentation.core.EIGHT_HUNDRED_MILLIS
 import ua.smartwaste.kmp.presentation.core.FIVE_HUNDRED_MILLIS
-import ua.smartwaste.kmp.presentation.core.ONE_SECOND
-import ua.smartwaste.kmp.presentation.core.TWO_HUNDRED_MILLIS
 import ua.smartwaste.kmp.presentation.core.TWO_SECOND
 import ua.smartwaste.kmp.presentation.core.painterDrawableResource
-import ua.smartwaste.kmp.presentation.screens.map.MapScreen
+import ua.smartwaste.kmp.presentation.screens.login.LoginScreen
 import ua.smartwaste.kmp.presentation.theme.SmartTheme
 
 /**
@@ -40,9 +37,9 @@ class SplashScreen : Screen {
 
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
+        val navigator = LocalNavigator.current
         SplashScreenContent {
-            navigator.push(MapScreen())
+            navigator?.replaceAll(LoginScreen())
         }
     }
 }

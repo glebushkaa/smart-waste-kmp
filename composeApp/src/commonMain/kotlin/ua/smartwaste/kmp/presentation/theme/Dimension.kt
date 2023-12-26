@@ -14,9 +14,18 @@ import androidx.compose.ui.unit.dp
 @Immutable
 data class Dimension(
     val splash: SplashDimension = SplashDimension(),
+    val login: LoginDimension = LoginDimension(),
 ) {
     @Immutable
     data class SplashDimension(val logo: Dp = 60.dp)
+
+    @Immutable
+    data class LoginDimension(
+        val maxLoginScreenWidth: Dp = 400.dp,
+        val topLogoSize: Dp = 24.dp,
+        val fieldHeight: Dp = 50.dp,
+        val buttonHeight: Dp = 54.dp,
+    )
 }
 
 fun buildDimension(
@@ -24,6 +33,18 @@ fun buildDimension(
 ): Dimension {
     return Dimension(
         splash = buildSplashDimension(windowSizeClass),
+        login = buildLoginDimension(windowSizeClass),
+    )
+}
+
+private fun buildLoginDimension(
+    windowSizeClass: WindowSizeClass,
+): Dimension.LoginDimension {
+    return Dimension.LoginDimension(
+        maxLoginScreenWidth = buildWidthDimension(400f, windowSizeClass.widthSizeClass),
+        topLogoSize = buildHeightDimension(24f, windowSizeClass.heightSizeClass),
+        fieldHeight = buildHeightDimension(50f, windowSizeClass.heightSizeClass),
+        buttonHeight = buildHeightDimension(54f, windowSizeClass.heightSizeClass),
     )
 }
 
