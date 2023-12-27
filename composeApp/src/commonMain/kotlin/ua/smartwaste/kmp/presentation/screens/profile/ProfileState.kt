@@ -7,9 +7,21 @@ package ua.smartwaste.kmp.presentation.screens.profile
 data class ProfileState(
     val username: String,
     val email: String,
+    val passedProgress: Float,
+    val requiredProgress: Int,
+    val currentProgress: Int,
+    val level: Int,
+    val bucketsCount: Int,
+    val daysCount: Int,
 )
 
 val emptyProfileState = ProfileState(
     username = "",
     email = "",
+    passedProgress = 0f,
+    requiredProgress = 0,
+    currentProgress = 0,
+    level = 0,
+    bucketsCount = 0,
+    daysCount = 0,
 )

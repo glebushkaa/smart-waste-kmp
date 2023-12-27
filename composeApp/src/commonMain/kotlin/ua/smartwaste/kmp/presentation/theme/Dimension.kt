@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 data class Dimension(
     val splash: SplashDimension = SplashDimension(),
     val login: LoginDimension = LoginDimension(),
+    val profile: ProfileDimension = ProfileDimension(),
 ) {
     @Immutable
     data class SplashDimension(val logo: Dp = 60.dp)
@@ -26,6 +27,13 @@ data class Dimension(
         val fieldHeight: Dp = 50.dp,
         val buttonHeight: Dp = 54.dp,
     )
+
+    @Immutable
+    data class ProfileDimension(
+        val profileImage: Dp = 110.dp,
+        val levelProgressHeight: Dp = 10.dp,
+        val userInfoCardSize: Dp = 76.dp,
+    )
 }
 
 fun buildDimension(
@@ -34,33 +42,41 @@ fun buildDimension(
     return Dimension(
         splash = buildSplashDimension(windowSizeClass),
         login = buildLoginDimension(windowSizeClass),
+        profile = buildProfileDimension(windowSizeClass),
     )
 }
 
 private fun buildLoginDimension(
     windowSizeClass: WindowSizeClass,
-): Dimension.LoginDimension {
+): Dimension.LoginDimension = with(windowSizeClass) {
     return Dimension.LoginDimension(
-        maxLoginScreenWidth = buildWidthDimension(400f, windowSizeClass.widthSizeClass),
-        topLogoSize = buildHeightDimension(24f, windowSizeClass.heightSizeClass),
-        fieldHeight = buildHeightDimension(50f, windowSizeClass.heightSizeClass),
-        buttonHeight = buildHeightDimension(54f, windowSizeClass.heightSizeClass),
+        maxLoginScreenWidth = buildWidthDimension(400.dp.value),
+        topLogoSize = buildHeightDimension(24.dp.value),
+        fieldHeight = buildHeightDimension(50.dp.value),
+        buttonHeight = buildHeightDimension(54.dp.value),
+    )
+}
+
+private fun buildProfileDimension(
+    windowSizeClass: WindowSizeClass,
+): Dimension.ProfileDimension = with(windowSizeClass) {
+    return Dimension.ProfileDimension(
+        profileImage = buildGeneralDimension(110.dp.value),
+        levelProgressHeight = buildHeightDimension(10.dp.value),
+        userInfoCardSize = buildGeneralDimension(76.dp.value),
     )
 }
 
 private fun buildSplashDimension(
     windowSizeClass: WindowSizeClass,
-): Dimension.SplashDimension {
+): Dimension.SplashDimension = with(windowSizeClass) {
     return Dimension.SplashDimension(
-        logo = buildGeneralDimension(60.dp.value, windowSizeClass),
+        logo = buildGeneralDimension(60.dp.value),
     )
 }
 
-private fun buildWidthDimension(
-    compactSize: Float,
-    sizeClass: WindowWidthSizeClass,
-): Dp {
-    return when (sizeClass) {
+private fun WindowSizeClass.buildWidthDimension(compactSize: Float): Dp {
+    return when (this.widthSizeClass) {
         WindowWidthSizeClass.Compact -> compactSize
         WindowWidthSizeClass.Medium -> compactSize * 1.3f
         WindowWidthSizeClass.Expanded -> compactSize * 1.6f
@@ -68,11 +84,8 @@ private fun buildWidthDimension(
     }.dp
 }
 
-private fun buildHeightDimension(
-    compactSize: Float,
-    sizeClass: WindowHeightSizeClass,
-): Dp {
-    return when (sizeClass) {
+private fun WindowSizeClass.buildHeightDimension(compactSize: Float): Dp {
+    return when (this.heightSizeClass) {
         WindowHeightSizeClass.Compact -> compactSize
         WindowHeightSizeClass.Medium -> compactSize * 1.3f
         WindowHeightSizeClass.Expanded -> compactSize * 1.6f
@@ -80,11 +93,8 @@ private fun buildHeightDimension(
     }.dp
 }
 
-private fun buildGeneralDimension(
-    compactWidth: Float,
-    sizeClass: WindowSizeClass,
-): Dp {
-    val heightSize = buildHeightDimension(compactWidth, sizeClass.heightSizeClass)
-    val widthSize = buildWidthDimension(compactWidth, sizeClass.widthSizeClass)
+private fun WindowSizeClass.buildGeneralDimension(compactWidth: Float): Dp {
+    val heightSize = buildHeightDimension(compactWidth)
+    val widthSize = buildWidthDimension(compactWidth)
     return minOf(heightSize, widthSize)
 }

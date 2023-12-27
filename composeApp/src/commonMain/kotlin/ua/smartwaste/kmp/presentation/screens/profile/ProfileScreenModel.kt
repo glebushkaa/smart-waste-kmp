@@ -31,6 +31,10 @@ class ProfileScreenModel(
             it.copy(
                 username = user.username,
                 email = user.email,
+                passedProgress = user.currentProgress / user.requiredProgress.toFloat(),
+                requiredProgress = user.requiredProgress,
+                currentProgress = user.currentProgress,
+                level = user.level,
             )
         }
     }
