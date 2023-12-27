@@ -16,6 +16,7 @@ data class Dimension(
     val splash: SplashDimension = SplashDimension(),
     val login: LoginDimension = LoginDimension(),
     val profile: ProfileDimension = ProfileDimension(),
+    val components: ComponentsDimension = ComponentsDimension(),
 ) {
     @Immutable
     data class SplashDimension(val logo: Dp = 60.dp)
@@ -34,6 +35,12 @@ data class Dimension(
         val levelProgressHeight: Dp = 10.dp,
         val userInfoCardSize: Dp = 76.dp,
     )
+
+    @Immutable
+    data class ComponentsDimension(
+        val topBarHeight: Dp = 56.dp,
+        val topBarImageSize: Dp = 32.dp,
+    )
 }
 
 fun buildDimension(
@@ -43,6 +50,16 @@ fun buildDimension(
         splash = buildSplashDimension(windowSizeClass),
         login = buildLoginDimension(windowSizeClass),
         profile = buildProfileDimension(windowSizeClass),
+        components = buildComponentsDimension(windowSizeClass),
+    )
+}
+
+private fun buildComponentsDimension(
+    windowSizeClass: WindowSizeClass,
+): Dimension.ComponentsDimension = with(windowSizeClass) {
+    return Dimension.ComponentsDimension(
+        topBarHeight = buildHeightDimension(56.dp.value),
+        topBarImageSize = buildGeneralDimension(32.dp.value),
     )
 }
 
@@ -78,8 +95,8 @@ private fun buildSplashDimension(
 private fun WindowSizeClass.buildWidthDimension(compactSize: Float): Dp {
     return when (this.widthSizeClass) {
         WindowWidthSizeClass.Compact -> compactSize
-        WindowWidthSizeClass.Medium -> compactSize * 1.3f
-        WindowWidthSizeClass.Expanded -> compactSize * 1.6f
+        WindowWidthSizeClass.Medium -> compactSize * 1.2f
+        WindowWidthSizeClass.Expanded -> compactSize * 1.4f
         else -> compactSize
     }.dp
 }
@@ -87,8 +104,8 @@ private fun WindowSizeClass.buildWidthDimension(compactSize: Float): Dp {
 private fun WindowSizeClass.buildHeightDimension(compactSize: Float): Dp {
     return when (this.heightSizeClass) {
         WindowHeightSizeClass.Compact -> compactSize
-        WindowHeightSizeClass.Medium -> compactSize * 1.3f
-        WindowHeightSizeClass.Expanded -> compactSize * 1.6f
+        WindowHeightSizeClass.Medium -> compactSize * 1.2f
+        WindowHeightSizeClass.Expanded -> compactSize * 1.4f
         else -> compactSize
     }.dp
 }

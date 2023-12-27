@@ -18,6 +18,7 @@ kotlinx = "1.7.3"
 voyager = "1.0.0"
 
 kotlinx-serialization = "1.6.1"
+kotlinx-collections-immutable = "0.3.6"
 napier = "2.6.1"
 
 koin-android = "3.5.0"
@@ -75,10 +76,13 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx" }
 
-
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
+
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
+
+
 
 settings-multiplatform = { group = "com.russhwolf", name = "multiplatform-settings", version.ref = "settings-multiplatform" }
 androidx-ui-unit-android = { group = "androidx.compose.ui", name = "ui-unit-android", version.ref = "uiUnitAndroid" }

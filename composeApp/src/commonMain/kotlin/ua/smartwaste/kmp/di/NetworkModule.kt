@@ -46,7 +46,7 @@ val networkModule = module {
 
     single<HttpClient>(named(USER_HTTP_CLIENT)) {
         val authPreferences = get<AuthPreferences>()
-        buildHttpClient {
+        buildHttpClient(additionalPath = "self") {
             val token = authPreferences.token ?: ""
             contentType(ContentType.Application.Json)
             header(HttpHeaders.Authorization, token)
@@ -80,6 +80,7 @@ private fun buildHttpClient(
         install(ContentNegotiation) {
             json(
                 Json {
+                    ignoreUnknownKeys = true
                     prettyPrint = true
                     isLenient = true
                 },

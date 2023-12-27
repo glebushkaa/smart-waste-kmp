@@ -1,6 +1,6 @@
 package ua.smartwaste.kmp.network.api.user
 
-import ua.smartwaste.kmp.network.api.user.model.Quest
+import ua.smartwaste.kmp.network.api.user.model.NetworkQuest
 import ua.smartwaste.kmp.network.api.user.model.NetworkUser
 
 /**
@@ -11,5 +11,5 @@ interface UserApi {
 
     suspend fun getUser(): NetworkUser
 
-    suspend fun getQuests(): List<Quest>
+    suspend fun getQuests(): List<NetworkQuest>
 }

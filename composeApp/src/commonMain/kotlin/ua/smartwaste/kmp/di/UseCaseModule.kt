@@ -9,6 +9,7 @@ import ua.smartwaste.kmp.domain.usecase.auth.LogOutUseCase
 import ua.smartwaste.kmp.domain.usecase.auth.LoginUseCase
 import ua.smartwaste.kmp.domain.usecase.auth.RegisterUseCase
 import ua.smartwaste.kmp.domain.usecase.core.UseCaseLogger
+import ua.smartwaste.kmp.domain.usecase.user.GetQuestsUseCase
 import ua.smartwaste.kmp.domain.usecase.user.GetUserUseCase
 
 /**
@@ -23,4 +24,5 @@ val useCaseModule = module {
     factoryOf(::LogOutUseCase)
 
     factoryOf(::GetUserUseCase)
+    factoryOf(::GetQuestsUseCase)
 }

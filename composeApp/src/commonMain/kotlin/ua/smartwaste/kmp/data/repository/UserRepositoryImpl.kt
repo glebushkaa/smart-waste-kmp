@@ -1,8 +1,10 @@
 package ua.smartwaste.kmp.data.repository
 
+import ua.smartwaste.kmp.data.mapper.toQuest
 import ua.smartwaste.kmp.data.mapper.toUser
 import ua.smartwaste.kmp.domain.exception.AuthException
 import ua.smartwaste.kmp.domain.repository.UserRepository
+import ua.smartwaste.kmp.model.Quest
 import ua.smartwaste.kmp.model.User
 import ua.smartwaste.kmp.network.api.user.UserApi
 import java.text.ParseException
@@ -18,6 +20,10 @@ import java.util.concurrent.TimeUnit
 class UserRepositoryImpl(
     private val userApi: UserApi,
 ) : UserRepository {
+
+    override suspend fun getQuests(): List<Quest> {
+        return userApi.getQuests().map { it.toQuest() }
+    }
 
     override suspend fun getUser(): User {
         val response = userApi.getUser()

@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -29,6 +31,9 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import ua.smartwaste.kmp.model.Quest
 import ua.smartwaste.kmp.presentation.core.ResourceType
 import ua.smartwaste.kmp.presentation.core.painterDrawableResource
 import ua.smartwaste.kmp.presentation.screens.login.LoginScreen
@@ -63,8 +68,30 @@ object ProfileScreen : Screen {
     }
 }
 
+// @Preview
 @Composable
-private fun ProfileScreenContent(
+fun ProfileScreenContentPreview() {
+    SmartTheme {
+        val state = ProfileState(
+            username = "Gleb",
+            email = "E6HhA@example.com",
+            currentProgress = 0,
+            requiredProgress = 10,
+            level = 1,
+            daysCount = 0,
+            passedProgress = 0f,
+            bucketsCount = 2,
+        )
+
+        ProfileScreenContent(
+            state = state,
+            sendEvent = {},
+        )
+    }
+}
+
+@Composable
+fun ProfileScreenContent(
     state: ProfileState,
     sendEvent: (ProfileEvent) -> Unit,
 ) {
@@ -169,6 +196,16 @@ private fun ProfileScreenContent(
                         fontWeight = FontWeight.SemiBold,
                     ),
                     color = SmartTheme.palette.onSurface,
+                )
+                QuestsList(
+                    modifier = Modifier
+                        .padding(
+                            top = SmartTheme.offset.height.regular,
+                            start = SmartTheme.offset.width.huge,
+                            end = SmartTheme.offset.width.huge,
+                        )
+                        .fillMaxSize(),
+                    quests = state.quests,
                 )
             }
         }
@@ -283,4 +320,66 @@ private fun LevelProgress(
                 )
             },
     )
+}
+
+@Composable
+private fun QuestsList(
+    modifier: Modifier = Modifier,
+    quests: ImmutableList<Quest> = persistentListOf(),
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(
+            SmartTheme.offset.height.regular,
+        ),
+    ) {
+        items(
+            items = quests,
+            key = { it.id },
+        ) { quest ->
+            QuestItem(quest = quest)
+        }
+    }
+}
+
+@Composable
+private fun QuestItem(
+    modifier: Modifier = Modifier,
+    quest: Quest,
+) {
+    val background = if (quest.currentProgress >= quest.requiredProgress) {
+        SmartTheme.palette.primary
+    } else {
+        SmartTheme.palette.secondary
+    }
+    Box(
+        modifier = modifier
+            .height(50.dp)
+            .fillMaxWidth()
+            .background(
+                color = background,
+                shape = SmartTheme.shape.large,
+            ),
+    ) {
+        Text(
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .padding(start = SmartTheme.offset.width.medium),
+            text = quest.title,
+            style = SmartTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.SemiBold,
+            ),
+            color = SmartTheme.palette.onPrimary,
+        )
+        Text(
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .padding(end = SmartTheme.offset.width.medium),
+            text = "${quest.currentProgress}/${quest.requiredProgress}",
+            style = SmartTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.SemiBold,
+            ),
+            color = SmartTheme.palette.onPrimary,
+        )
+    }
 }
