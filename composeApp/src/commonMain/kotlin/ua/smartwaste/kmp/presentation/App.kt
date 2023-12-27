@@ -1,6 +1,8 @@
 package ua.smartwaste.kmp.presentation
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -11,9 +13,11 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.FadeTransition
 import org.koin.compose.koinInject
 import ua.smartwaste.kmp.presentation.components.AnimatedTopBar
+import ua.smartwaste.kmp.presentation.core.FOUR_HUNDRED_MILLIS
 import ua.smartwaste.kmp.presentation.screens.login.LoginScreen
 import ua.smartwaste.kmp.presentation.screens.profile.ProfileScreen
 import ua.smartwaste.kmp.presentation.screens.splash.SplashScreen
+import ua.smartwaste.kmp.presentation.tabs.AnimatedBottomTabs
 import ua.smartwaste.kmp.presentation.theme.SmartTheme
 
 @Composable
@@ -42,12 +46,19 @@ fun App() {
                 },
                 content = {
                     FadeTransition(
+                        modifier = Modifier.padding(it),
+                        animationSpec = tween(FOUR_HUNDRED_MILLIS.toInt()),
                         navigator = navigator,
                     ) { screen ->
                         screen.Content()
                     }
                 },
-                bottomBar = { },
+                bottomBar = {
+                    AnimatedBottomTabs(
+                        navigator = navigator,
+                        visible = visible,
+                    )
+                },
                 backgroundColor = SmartTheme.palette.background,
             )
         }

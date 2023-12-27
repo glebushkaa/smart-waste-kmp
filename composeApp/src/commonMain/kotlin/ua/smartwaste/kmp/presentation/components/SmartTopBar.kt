@@ -3,6 +3,8 @@ package ua.smartwaste.kmp.presentation.components
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import ua.smartwaste.kmp.presentation.core.EIGHT_HUNDRED_MILLIS
 import ua.smartwaste.kmp.presentation.core.FIVE_HUNDRED_MILLIS
 import ua.smartwaste.kmp.presentation.core.ResourceType
 import ua.smartwaste.kmp.presentation.core.painterDrawableResource
@@ -38,10 +41,14 @@ fun AnimatedTopBar(
         enter = expandVertically(
             expandFrom = Alignment.Top,
             animationSpec = tween(FIVE_HUNDRED_MILLIS.toInt()),
+        ) + fadeIn(
+            animationSpec = tween(EIGHT_HUNDRED_MILLIS.toInt()),
         ),
         exit = shrinkVertically(
             shrinkTowards = Alignment.Top,
             animationSpec = tween(FIVE_HUNDRED_MILLIS.toInt()),
+        ) + fadeOut(
+            animationSpec = tween(EIGHT_HUNDRED_MILLIS.toInt()),
         ),
     ) {
         SmartTopBar(

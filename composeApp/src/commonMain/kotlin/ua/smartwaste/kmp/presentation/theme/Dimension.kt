@@ -16,6 +16,7 @@ data class Dimension(
     val splash: SplashDimension = SplashDimension(),
     val login: LoginDimension = LoginDimension(),
     val profile: ProfileDimension = ProfileDimension(),
+    val bucket: BucketDimension = BucketDimension(),
     val components: ComponentsDimension = ComponentsDimension(),
 ) {
     @Immutable
@@ -41,6 +42,12 @@ data class Dimension(
         val topBarHeight: Dp = 46.dp,
         val topBarImageSize: Dp = 26.dp,
     )
+
+    @Immutable
+    data class BucketDimension(
+        val rubbishItemCountButtonSize: Dp = 40.dp,
+        val rubbishItemTextHeight: Dp = 32.dp,
+    )
 }
 
 fun buildDimension(
@@ -50,7 +57,17 @@ fun buildDimension(
         splash = buildSplashDimension(windowSizeClass),
         login = buildLoginDimension(windowSizeClass),
         profile = buildProfileDimension(windowSizeClass),
+        bucket = buildBucketDimension(windowSizeClass),
         components = buildComponentsDimension(windowSizeClass),
+    )
+}
+
+private fun buildBucketDimension(
+    windowSizeClass: WindowSizeClass,
+): Dimension.BucketDimension = with(windowSizeClass) {
+    return Dimension.BucketDimension(
+        rubbishItemCountButtonSize = buildGeneralDimension(40.dp.value),
+        rubbishItemTextHeight = buildHeightDimension(32.dp.value),
     )
 }
 
