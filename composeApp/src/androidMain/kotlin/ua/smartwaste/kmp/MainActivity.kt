@@ -13,11 +13,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SmartTheme {
-                window.statusBarColor = SmartTheme.palette.background.toArgb()
-                window.navigationBarColor = SmartTheme.palette.background.toArgb()
-                App()
-            }
+            window.statusBarColor = SmartTheme.palette.background.toArgb()
+            window.navigationBarColor = SmartTheme.palette.background.toArgb()
+            App()
         }
     }
 }

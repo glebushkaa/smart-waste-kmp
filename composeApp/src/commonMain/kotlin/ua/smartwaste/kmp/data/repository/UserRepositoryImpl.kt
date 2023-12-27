@@ -1,8 +1,10 @@
 package ua.smartwaste.kmp.data.repository
 
-import ua.smartwaste.kmp.domain.exception.AuthException
+import ua.smartwaste.kmp.data.mapper.toQuest
 import ua.smartwaste.kmp.data.mapper.toUser
+import ua.smartwaste.kmp.domain.exception.AuthException
 import ua.smartwaste.kmp.domain.repository.UserRepository
+import ua.smartwaste.kmp.model.Quest
 import ua.smartwaste.kmp.model.User
 import ua.smartwaste.kmp.network.api.user.UserApi
 import java.text.ParseException
@@ -19,6 +21,10 @@ class UserRepositoryImpl(
     private val userApi: UserApi,
 ) : UserRepository {
 
+    override suspend fun getQuests(): List<Quest> {
+        return userApi.getQuests().map { it.toQuest() }
+    }
+
     override suspend fun getUser(): User {
         val response = userApi.getUser()
         if (response.message?.isNotEmpty() == true) {
@@ -29,7 +35,10 @@ class UserRepositoryImpl(
             throw exception
         }
         val days = response.createdAt?.let { calculateDaysSinceCreation(it) } ?: 0
-        return response.toUser(days = days)
+        return response.toUser(
+            days = days,
+            requiredProgress = REQUIRED_LEVEL_PROGRESS,
+        )
     }
 
     private fun calculateDaysSinceCreation(createdAt: String): Int {
@@ -46,16 +55,7 @@ class UserRepositoryImpl(
 
     private companion object {
         private const val DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-
-        const val LOGIN_EXCEPTION = 100
-        const val REGISTER_EXCEPTION = 200
-        const val GET_USER_EXCEPTION = 300
-        const val DELETE_ACCOUNT_EXCEPTION = -180
-        const val NO_TOKEN_EXCEPTION = -199
-
-        const val PASSWORD_IS_NOT_VALID = "invalid-password"
-        const val USER_NOT_FOUND = "user-not-found"
-        const val EMAIL_NOT_UNIQUE = "email-not-unique"
-        const val USERNAME_NOT_UNIQUE = "username-not-unique"
+        private const val GET_USER_EXCEPTION = 300
+        private const val REQUIRED_LEVEL_PROGRESS = 500
     }
 }

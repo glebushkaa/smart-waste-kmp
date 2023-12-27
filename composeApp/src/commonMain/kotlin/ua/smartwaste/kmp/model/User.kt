@@ -8,7 +8,9 @@ data class User(
     val id: String,
     val username: String,
     val email: String,
-    val score: Int = 0,
+    val level: Int,
+    val currentProgress: Int,
+    val requiredProgress: Int,
     val days: Int = 0,
     val buckets: Int = 0,
 )
@@ -17,4 +19,7 @@ fun emptyUser(): User = User(
     id = "",
     username = "",
     email = "",
+    level = 0,
+    currentProgress = 0,
+    requiredProgress = 0,
 )

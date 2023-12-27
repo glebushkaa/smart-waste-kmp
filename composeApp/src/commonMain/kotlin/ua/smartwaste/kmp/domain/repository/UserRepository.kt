@@ -1,5 +1,6 @@
 package ua.smartwaste.kmp.domain.repository
 
+import ua.smartwaste.kmp.model.Quest
 import ua.smartwaste.kmp.model.User
 
 /**
@@ -9,4 +10,6 @@ import ua.smartwaste.kmp.model.User
 interface UserRepository {
 
     suspend fun getUser(): User
+
+    suspend fun getQuests(): List<Quest>
 }

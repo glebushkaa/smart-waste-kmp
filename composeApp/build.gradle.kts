@@ -48,6 +48,8 @@ kotlin {
             implementation(libs.kotlinx.serialization.core)
             implementation(libs.settings.multiplatform)
 
+            implementation(libs.kotlinx.collections.immutable)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -61,9 +63,9 @@ kotlin {
         }
 
         desktopMain.dependencies {
+            implementation(compose.preview)
             implementation(libs.bundles.ktor.multiplatform.jvm)
             implementation(compose.desktop.currentOs)
-            implementation(compose.preview)
 
             runtimeOnly(libs.kotlinx.coroutines.swing)
         }
