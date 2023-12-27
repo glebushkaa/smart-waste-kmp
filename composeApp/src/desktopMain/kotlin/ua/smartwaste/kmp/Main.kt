@@ -1,6 +1,7 @@
 package ua.smartwaste.kmp
 
 import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import io.github.aakira.napier.DebugAntilog
@@ -20,12 +21,13 @@ fun main() {
     Napier.base(DebugAntilog())
     application {
         val minSize = Dimension(400, 800)
-
         Window(
             title = "SmartWaste",
             icon = painterDrawableResource("img_recycle"),
             onCloseRequest = ::exitApplication,
-            state = WindowState(),
+            state = WindowState(
+                placement = WindowPlacement.Maximized,
+            ),
         ) {
             window.minimumSize = minSize
             App()

@@ -10,7 +10,6 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -93,19 +92,19 @@ private fun LoginScreenContent(
     state: LoginState = LoginState(),
     sendEvent: (LoginEvent) -> Unit = {},
 ) {
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(SmartTheme.palette.background)
             .padding(horizontal = SmartTheme.offset.width.large),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         LoginFields(
             modifier = Modifier
                 .widthIn(
                     max = SmartTheme.dimension.login.maxLoginScreenWidth,
                 )
-                .fillMaxWidth()
-                .align(Alignment.TopCenter),
+                .fillMaxWidth(),
             screenType = state.loginMode,
             username = state.username,
             email = state.email,
@@ -120,13 +119,14 @@ private fun LoginScreenContent(
                 sendEvent(LoginEvent.UpdatePasswordTextField(password))
             },
         )
+        Spacer(modifier = Modifier.weight(1f))
         BottomLoginButtons(
             modifier = Modifier
+                .padding(top = SmartTheme.offset.height.regular)
                 .widthIn(
                     max = SmartTheme.dimension.login.maxLoginScreenWidth,
                 )
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter),
+                .fillMaxWidth(),
             screenType = state.loginMode,
             loginButtonEnabled = state.loginButtonEnabled,
             onLoginClick = {
@@ -157,8 +157,10 @@ private fun AppTitle(
         )
         Spacer(modifier = Modifier.width(SmartTheme.offset.width.small))
         Text(
-            text = "GuideBook",
-            style = SmartTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+            text = "SmartWaste",
+            style = SmartTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.Bold,
+            ),
             color = SmartTheme.palette.onSurface,
         )
     }
@@ -193,7 +195,7 @@ private fun LoginFields(
     passwordChanged: (String) -> Unit = {},
     usernameChanged: (String) -> Unit = {},
 ) {
-    val giganticOffset = SmartTheme.offset.height.gigantic
+    val hugeOffset = SmartTheme.offset.height.huge
     val loginFieldHeight = SmartTheme.dimension.login.fieldHeight
     val defaultOffset = SmartTheme.offset.height.default
     val usernameFieldHeight by remember(screenType) {
@@ -203,7 +205,7 @@ private fun LoginFields(
     }
     val padding by remember(screenType) {
         derivedStateOf {
-            if (screenType == LoginMode.REGISTER) giganticOffset else defaultOffset
+            if (screenType == LoginMode.REGISTER) hugeOffset else defaultOffset
         }
     }
     val animatedPadding by animateDpAsState(
@@ -230,12 +232,12 @@ private fun LoginFields(
         AppTitle(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(top = SmartTheme.offset.height.large),
+                .padding(top = SmartTheme.offset.height.regular),
         )
         LoginHeader(
             modifier = Modifier
                 .align(Alignment.Start)
-                .padding(top = SmartTheme.offset.height.large),
+                .padding(top = SmartTheme.offset.height.regular),
             screenType = screenType,
         )
         AnimatedVisibility(
@@ -262,14 +264,14 @@ private fun LoginFields(
                 keyboardType = KeyboardType.Text,
             )
         }
-        Spacer(modifier = Modifier.height(SmartTheme.offset.height.huge))
+        Spacer(modifier = Modifier.height(SmartTheme.offset.height.regular))
         LoginTextField(
             value = email,
             onValueChanged = emailChanged,
             placeholder = "Email",
             keyboardType = KeyboardType.Text,
         )
-        Spacer(modifier = Modifier.height(SmartTheme.offset.height.huge))
+        Spacer(modifier = Modifier.height(SmartTheme.offset.height.regular))
         LoginTextField(
             value = password,
             onValueChanged = passwordChanged,

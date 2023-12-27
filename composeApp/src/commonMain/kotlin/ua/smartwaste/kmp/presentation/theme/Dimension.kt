@@ -19,27 +19,27 @@ data class Dimension(
     val components: ComponentsDimension = ComponentsDimension(),
 ) {
     @Immutable
-    data class SplashDimension(val logo: Dp = 60.dp)
+    data class SplashDimension(val logo: Dp = 50.dp)
 
     @Immutable
     data class LoginDimension(
-        val maxLoginScreenWidth: Dp = 400.dp,
-        val topLogoSize: Dp = 24.dp,
-        val fieldHeight: Dp = 50.dp,
-        val buttonHeight: Dp = 54.dp,
+        val maxLoginScreenWidth: Dp = 330.dp,
+        val topLogoSize: Dp = 20.dp,
+        val fieldHeight: Dp = 40.dp,
+        val buttonHeight: Dp = 44.dp,
     )
 
     @Immutable
     data class ProfileDimension(
-        val profileImage: Dp = 110.dp,
-        val levelProgressHeight: Dp = 10.dp,
-        val userInfoCardSize: Dp = 76.dp,
+        val profileImage: Dp = 90.dp,
+        val levelProgressHeight: Dp = 8.dp,
+        val userInfoCardSize: Dp = 62.dp,
     )
 
     @Immutable
     data class ComponentsDimension(
-        val topBarHeight: Dp = 56.dp,
-        val topBarImageSize: Dp = 32.dp,
+        val topBarHeight: Dp = 46.dp,
+        val topBarImageSize: Dp = 26.dp,
     )
 }
 
@@ -58,8 +58,8 @@ private fun buildComponentsDimension(
     windowSizeClass: WindowSizeClass,
 ): Dimension.ComponentsDimension = with(windowSizeClass) {
     return Dimension.ComponentsDimension(
-        topBarHeight = buildHeightDimension(56.dp.value),
-        topBarImageSize = buildGeneralDimension(32.dp.value),
+        topBarHeight = buildHeightDimension(46.dp.value),
+        topBarImageSize = buildGeneralDimension(26.dp.value),
     )
 }
 
@@ -67,10 +67,10 @@ private fun buildLoginDimension(
     windowSizeClass: WindowSizeClass,
 ): Dimension.LoginDimension = with(windowSizeClass) {
     return Dimension.LoginDimension(
-        maxLoginScreenWidth = buildWidthDimension(400.dp.value),
-        topLogoSize = buildHeightDimension(24.dp.value),
-        fieldHeight = buildHeightDimension(50.dp.value),
-        buttonHeight = buildHeightDimension(54.dp.value),
+        maxLoginScreenWidth = buildWidthDimension(330.dp.value),
+        topLogoSize = buildHeightDimension(20.dp.value),
+        fieldHeight = buildHeightDimension(44.dp.value),
+        buttonHeight = buildHeightDimension(44.dp.value),
     )
 }
 
@@ -78,9 +78,9 @@ private fun buildProfileDimension(
     windowSizeClass: WindowSizeClass,
 ): Dimension.ProfileDimension = with(windowSizeClass) {
     return Dimension.ProfileDimension(
-        profileImage = buildGeneralDimension(110.dp.value),
-        levelProgressHeight = buildHeightDimension(10.dp.value),
-        userInfoCardSize = buildGeneralDimension(76.dp.value),
+        profileImage = buildGeneralDimension(90.dp.value),
+        levelProgressHeight = buildHeightDimension(8.dp.value),
+        userInfoCardSize = buildGeneralDimension(62.dp.value),
     )
 }
 
@@ -88,7 +88,7 @@ private fun buildSplashDimension(
     windowSizeClass: WindowSizeClass,
 ): Dimension.SplashDimension = with(windowSizeClass) {
     return Dimension.SplashDimension(
-        logo = buildGeneralDimension(60.dp.value),
+        logo = buildGeneralDimension(50.dp.value),
     )
 }
 
