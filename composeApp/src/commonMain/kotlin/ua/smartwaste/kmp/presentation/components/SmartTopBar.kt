@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import ua.smartwaste.kmp.presentation.core.FIVE_HUNDRED_MILLIS
+import ua.smartwaste.kmp.presentation.core.ResourceType
 import ua.smartwaste.kmp.presentation.core.painterDrawableResource
 import ua.smartwaste.kmp.presentation.theme.SmartTheme
 
@@ -28,6 +29,8 @@ import ua.smartwaste.kmp.presentation.theme.SmartTheme
 fun AnimatedTopBar(
     modifier: Modifier = Modifier,
     visible: Boolean,
+    logOutVisible: Boolean = false,
+    logOut: () -> Unit = {},
 ) {
     AnimatedVisibility(
         modifier = modifier,
@@ -41,12 +44,19 @@ fun AnimatedTopBar(
             animationSpec = tween(FIVE_HUNDRED_MILLIS.toInt()),
         ),
     ) {
-        SmartTopBar()
+        SmartTopBar(
+            logOutVisible = logOutVisible,
+            logOut = logOut,
+        )
     }
 }
 
 @Composable
-private fun SmartTopBar(modifier: Modifier = Modifier) {
+private fun SmartTopBar(
+    modifier: Modifier = Modifier,
+    logOutVisible: Boolean = false,
+    logOut: () -> Unit = {},
+) {
     Row(
         modifier = modifier
             .height(SmartTheme.dimension.components.topBarHeight)
@@ -63,9 +73,7 @@ private fun SmartTopBar(modifier: Modifier = Modifier) {
         )
         Text(
             modifier = Modifier
-                .padding(
-                    horizontal = SmartTheme.offset.width.medium,
-                )
+                .padding(horizontal = SmartTheme.offset.width.medium)
                 .weight(1f),
             text = "SmartWaste",
             style = SmartTheme.typography.titleLarge.copy(
@@ -73,5 +81,18 @@ private fun SmartTopBar(modifier: Modifier = Modifier) {
             ),
             color = SmartTheme.palette.onBackground,
         )
+        AnimatedVisibility(logOutVisible) {
+            SmartIconButton(
+                modifier = Modifier
+                    .padding(end = SmartTheme.offset.width.regular)
+                    .size(SmartTheme.dimension.components.topBarImageSize),
+                painterResource = painterDrawableResource(
+                    id = "ic_log_out",
+                    type = ResourceType.XML,
+                ),
+                onClick = logOut,
+                tint = SmartTheme.palette.error,
+            )
+        }
     }
 }

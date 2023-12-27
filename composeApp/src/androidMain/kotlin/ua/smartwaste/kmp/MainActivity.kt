@@ -10,6 +10,7 @@ import ua.smartwaste.kmp.presentation.App
 import ua.smartwaste.kmp.presentation.theme.SmartTheme
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
