@@ -47,6 +47,12 @@ data class Dimension(
     data class BucketDimension(
         val rubbishItemCountButtonSize: Dp = 40.dp,
         val rubbishItemTextHeight: Dp = 32.dp,
+        val addRubbishPopupHeight: Dp = 330.dp,
+        val counterHeight: Dp = 44.dp,
+        val addButtonHeight: Dp = 44.dp,
+        val cancelButtonHeight: Dp = 44.dp,
+        val counterButtonSize: Dp = 32.dp,
+        val counterTextWidth: Dp = 26.dp,
     )
 }
 
@@ -68,6 +74,12 @@ private fun buildBucketDimension(
     return Dimension.BucketDimension(
         rubbishItemCountButtonSize = buildGeneralDimension(40.dp.value),
         rubbishItemTextHeight = buildHeightDimension(32.dp.value),
+        addRubbishPopupHeight = buildHeightDimension(330.dp.value),
+        counterHeight = buildHeightDimension(44.dp.value),
+        addButtonHeight = buildHeightDimension(44.dp.value),
+        cancelButtonHeight = buildHeightDimension(44.dp.value),
+        counterButtonSize = buildGeneralDimension(32.dp.value),
+        counterTextWidth = buildWidthDimension(32.dp.value),
     )
 }
 
