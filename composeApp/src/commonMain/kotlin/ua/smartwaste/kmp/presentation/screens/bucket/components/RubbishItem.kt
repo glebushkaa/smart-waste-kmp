@@ -1,7 +1,7 @@
 package ua.smartwaste.kmp.presentation.screens.bucket.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,7 +25,7 @@ fun RubbishItem(
     decreaseCountClicked: () -> Unit = {},
     increaseCountClicked: () -> Unit = {},
 ) {
-    Box(
+    Row(
         modifier = modifier
             .height(60.dp)
             .fillMaxWidth()
@@ -33,11 +33,12 @@ fun RubbishItem(
                 color = SmartTheme.palette.surface,
                 shape = SmartTheme.shape.medium,
             ),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             modifier = Modifier
                 .padding(horizontal = SmartTheme.offset.width.large)
-                .align(Alignment.CenterStart),
+                .weight(1f),
             text = item.name,
             style = SmartTheme.typography.bodyLargeBold,
             color = SmartTheme.palette.onSurface,
@@ -45,9 +46,7 @@ fun RubbishItem(
             overflow = TextOverflow.Ellipsis,
         )
         RubbishCounter(
-            modifier = Modifier
-                .padding(end = SmartTheme.offset.width.regular)
-                .align(Alignment.CenterStart),
+            modifier = Modifier.padding(end = SmartTheme.offset.width.regular),
             decreaseClicked = decreaseCountClicked,
             increaseClicked = increaseCountClicked,
             count = item.count,

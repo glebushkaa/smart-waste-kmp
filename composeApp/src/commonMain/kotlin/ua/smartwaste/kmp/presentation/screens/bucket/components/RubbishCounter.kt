@@ -30,7 +30,7 @@ fun RubbishCounter(
     max: Int = DEFAULT_MAX_VALUE,
 ) {
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier,
     ) {
         SmartOutlinedIconButton(
             modifier = Modifier

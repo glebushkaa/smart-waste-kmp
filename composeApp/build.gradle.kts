@@ -6,6 +6,15 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.serialization)
+    id("app.cash.sqldelight") version "2.0.1"
+}
+
+sqldelight {
+    databases {
+        create("SmartDatabase") {
+            packageName.set("smartwaste.rubbish")
+        }
+    }
 }
 
 kotlin {
@@ -38,6 +47,8 @@ kotlin {
             implementation(libs.compose.android.material)
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+
+            implementation("app.cash.sqldelight:android-driver:2.0.1")
         }
         commonMain.dependencies {
 
@@ -50,6 +61,8 @@ kotlin {
             implementation(libs.settings.multiplatform)
 
             implementation(libs.kotlinx.collections.immutable)
+
+            implementation("app.cash.sqldelight:coroutines-extensions:2.0.1")
 
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -69,6 +82,8 @@ kotlin {
             implementation(compose.desktop.currentOs)
 
             runtimeOnly(libs.kotlinx.coroutines.swing)
+
+            implementation("app.cash.sqldelight:sqlite-driver:2.0.1")
         }
     }
 }

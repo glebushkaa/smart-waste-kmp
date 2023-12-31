@@ -29,6 +29,7 @@ class LoginScreenModel(
     }
 
     private fun login() = screenModelScope.launch {
+        mutableState.update { it.copy(loaderVisible = true) }
         val params = LoginUseCase.Params(
             email = state.value.email,
             password = state.value.password,
@@ -36,9 +37,11 @@ class LoginScreenModel(
         loginUseCase(params).onSuccess {
             _navigationEvent.trySend(LoginNavigationEvent.NavigateToProfile)
         }
+        mutableState.update { it.copy(loaderVisible = false) }
     }
 
     private fun register() = screenModelScope.launch {
+        mutableState.update { it.copy(loaderVisible = true) }
         val params = RegisterUseCase.Params(
             username = state.value.username,
             email = state.value.email,
@@ -47,6 +50,7 @@ class LoginScreenModel(
         registerUseCase(params).onSuccess {
             _navigationEvent.trySend(LoginNavigationEvent.NavigateToProfile)
         }
+        mutableState.update { it.copy(loaderVisible = false) }
     }
 
     private fun validateInput(

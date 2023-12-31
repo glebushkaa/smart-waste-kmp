@@ -74,7 +74,8 @@ fun AddRubbishSection(
         }
         Spacer(modifier = Modifier.height(SmartTheme.offset.height.regular))
         RubbishCounter(
-            modifier = Modifier.height(SmartTheme.dimension.bucket.counterHeight)
+            modifier = Modifier
+                .height(SmartTheme.dimension.bucket.counterHeight)
                 .fillMaxWidth()
                 .background(
                     color = SmartTheme.palette.surface,

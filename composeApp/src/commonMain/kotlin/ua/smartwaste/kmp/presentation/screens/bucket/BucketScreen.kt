@@ -73,6 +73,7 @@ fun BucketScreenContent(
                     end = SmartTheme.offset.width.huge,
                 )
                 .weight(1f),
+            rubbishList = state.selectedRubbishList,
         )
         SmartOutlinedButton(
             modifier = Modifier
