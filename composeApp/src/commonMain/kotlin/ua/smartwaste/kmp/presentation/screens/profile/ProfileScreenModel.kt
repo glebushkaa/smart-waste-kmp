@@ -46,6 +46,8 @@ class ProfileScreenModel(
                 requiredProgress = user.requiredProgress,
                 currentProgress = user.currentProgress,
                 level = user.level,
+                daysCount = user.days,
+                bucketsCount = user.buckets
             )
         }
     }

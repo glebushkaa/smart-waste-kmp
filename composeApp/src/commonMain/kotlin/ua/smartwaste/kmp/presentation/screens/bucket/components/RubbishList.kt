@@ -24,8 +24,8 @@ import ua.smartwaste.kmp.presentation.theme.SmartTheme
 fun RubbishList(
     modifier: Modifier = Modifier,
     rubbishList: ImmutableList<Rubbish> = persistentListOf(),
-    decreaseClicked: (String) -> Unit = {},
-    increaseClicked: (String) -> Unit = {},
+    decreaseClicked: (Long) -> Unit,
+    increaseClicked: (Long) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier
@@ -45,15 +45,15 @@ fun RubbishList(
         items(
             items = rubbishList,
             key = { item -> item.name },
-        ) { bucketItem ->
+        ) { rubbish ->
             RubbishItem(
                 modifier = Modifier.animateItemPlacement(),
-                item = bucketItem,
+                item = rubbish,
                 decreaseCountClicked = {
-                    decreaseClicked(bucketItem.name)
+                    decreaseClicked(rubbish.id)
                 },
                 increaseCountClicked = {
-                    increaseClicked(bucketItem.name)
+                    increaseClicked(rubbish.id)
                 },
             )
         }

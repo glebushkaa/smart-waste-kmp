@@ -34,6 +34,7 @@ expect fun AddRubbishPopup(
     modifier: Modifier = Modifier,
     availableRubbishes: ImmutableList<Rubbish> = persistentListOf(),
     dismissRequest: () -> Unit,
+    addClicked: (Long, Int) -> Unit,
 )
 
 @Composable
@@ -41,7 +42,7 @@ fun AddRubbishPopupContent(
     modifier: Modifier = Modifier,
     availableRubbishes: ImmutableList<Rubbish> = persistentListOf(),
     cancelClicked: () -> Unit,
-    addClicked: (Rubbish) -> Unit,
+    addClicked: (Long, Int) -> Unit,
     scanClicked: () -> Unit,
 ) {
     var selectedRubbish by remember {
@@ -67,7 +68,10 @@ fun AddRubbishPopupContent(
                 modifier = Modifier.height(SmartTheme.dimension.bucket.addRubbishPopupHeight),
                 rubbishName = selectedRubbish?.name ?: "",
                 selectClicked = { mode = AddRubbishSheetMode.SELECT },
-                addClicked = {},
+                addClicked = { count ->
+                    val id = selectedRubbish?.id ?: 0
+                    addClicked(id, count)
+                },
                 cancelClicked = cancelClicked,
                 scanClicked = scanClicked,
             )

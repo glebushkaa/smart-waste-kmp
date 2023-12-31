@@ -41,7 +41,7 @@ fun AddRubbishSection(
     modifier: Modifier = Modifier,
     rubbishName: String,
     selectClicked: () -> Unit,
-    addClicked: () -> Unit,
+    addClicked: (Int) -> Unit,
     cancelClicked: () -> Unit,
     scanClicked: () -> Unit,
 ) {
@@ -97,7 +97,9 @@ fun AddRubbishSection(
             shape = SmartTheme.shape.medium,
             text = "Add",
             textStyle = SmartTheme.typography.bodyLarge,
-            onClick = addClicked,
+            onClick = {
+                addClicked(count)
+            },
         )
         Spacer(modifier = Modifier.height(SmartTheme.offset.height.regular))
         SmartButton(

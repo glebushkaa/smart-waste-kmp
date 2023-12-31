@@ -1,18 +1,16 @@
 package ua.smartwaste.kmp.presentation.screens.bucket
 
-import app.cash.sqldelight.coroutines.asFlow
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import smartwaste.rubbish.SmartDatabase
+import ua.smartwaste.kmp.domain.usecase.items.AddRubbishUseCase
+import ua.smartwaste.kmp.domain.usecase.items.GetAllRubbishesFlowUseCase
 import ua.smartwaste.kmp.domain.usecase.items.GetAvailableRubbishesUseCase
-import ua.smartwaste.kmp.model.Rubbish
+import ua.smartwaste.kmp.domain.usecase.items.UpdateRubbishCountUseCase
+import ua.smartwaste.kmp.log.error
+import ua.smartwaste.kmp.log.info
 
 /**
  * Created by gle.bushkaa email(gleb.mokryy@gmail.com) on 12/27/2023
@@ -20,13 +18,14 @@ import ua.smartwaste.kmp.model.Rubbish
 
 class BucketScreenModel(
     private val getAvailableRubbishesUseCase: GetAvailableRubbishesUseCase,
-    private val smartDatabase: SmartDatabase,
+    private val getAllRubbishesFlowUseCase: GetAllRubbishesFlowUseCase,
+    private val addRubbishUseCase: AddRubbishUseCase,
+    private val updateRubbishCountUseCase: UpdateRubbishCountUseCase
 ) : StateScreenModel<BucketState>(BucketState()) {
 
     init {
-        insertRubbishes()
+        collectAllRubbishes()
         getAvailableRubbishes()
-        collectRubbishes()
     }
 
     fun sendEvent(event: BucketEvent) {
@@ -38,41 +37,68 @@ class BucketScreenModel(
             BucketEvent.ShowAddRubbishPopup -> {
                 mutableState.update { it.copy(rubbishPopupVisible = true) }
             }
+
+            is BucketEvent.AddRubbish -> {
+                addRubbish(id = event.id, count = event.count)
+            }
+
+            is BucketEvent.DecreaseCount -> {
+                decreaseCount(id = event.id)
+            }
+
+            is BucketEvent.IncreaseCount -> {
+                increaseCount(id = event.id)
+            }
         }
     }
 
-    private fun insertRubbishes() = screenModelScope.launch(Dispatchers.IO) {
-        repeat(10) {
-            smartDatabase.rubbishQueries.insertRubbish(
-                it.toLong(),
-                "Rubbish $it",
-                it.toLong(),
-            )
+    private fun increaseCount(id: Long) = screenModelScope.launch {
+        val count = state.value.selectedRubbishList.find { rubbish ->
+            rubbish.id == id
+        }?.count ?: run {
+            error(TAG) { "No rubbish with provided id was found" }
+            return@launch
         }
+        val params = UpdateRubbishCountUseCase.Params(id = id, count = count + 1)
+        updateRubbishCountUseCase(params)
     }
 
-    private fun collectRubbishes() = screenModelScope.launch(Dispatchers.IO) {
-        smartDatabase.rubbishQueries.getAllRubbishes()
-            .asFlow()
-            .map {
-                it.executeAsList().map {
-                    Rubbish(
-                        id = it.id,
-                        name = it.name,
-                        count = it.count.toInt(),
-                    )
-                }
+    private fun decreaseCount(id: Long) = screenModelScope.launch {
+        val count = state.value.selectedRubbishList.find { rubbish ->
+            rubbish.id == id
+        }?.count ?: run {
+            error(TAG) { "No rubbish with provided id was found" }
+            return@launch
+        }
+        val params = UpdateRubbishCountUseCase.Params(id = id, count = count - 1)
+        updateRubbishCountUseCase(params)
+    }
+
+    private fun addRubbish(id: Long, count: Int) = screenModelScope.launch {
+        val rubbish = state.value.availableRubbishList.find { it.id == id } ?: run {
+            error(TAG) { "No rubbish with provided id was found" }
+            return@launch
+        }
+        val params = AddRubbishUseCase.Params(rubbish = rubbish.copy(count = count))
+        addRubbishUseCase(params)
+    }
+
+    private fun collectAllRubbishes() = screenModelScope.launch {
+        getAllRubbishesFlowUseCase().getOrNull()?.collect { list ->
+            mutableState.update {
+                it.copy(selectedRubbishList = list)
             }
-            .collectLatest { list ->
-                mutableState.update {
-                    val immutableList = list.toImmutableList()
-                    it.copy(selectedRubbishList = immutableList)
-                }
-            }
+        }
     }
 
     private fun getAvailableRubbishes() = screenModelScope.launch {
         val result = getAvailableRubbishesUseCase().getOrDefault(persistentListOf())
-        mutableState.update { it.copy(availableRubbishList = result) }
+        mutableState.update {
+            it.copy(availableRubbishList = result)
+        }
+    }
+
+    private companion object {
+        private const val TAG = "BucketScreenModel"
     }
 }

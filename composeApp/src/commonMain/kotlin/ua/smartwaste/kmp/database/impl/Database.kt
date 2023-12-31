@@ -1,4 +1,4 @@
-package ua.smartwaste.kmp.database
+package ua.smartwaste.kmp.database.impl
 
 import app.cash.sqldelight.db.SqlDriver
 import smartwaste.rubbish.SmartDatabase

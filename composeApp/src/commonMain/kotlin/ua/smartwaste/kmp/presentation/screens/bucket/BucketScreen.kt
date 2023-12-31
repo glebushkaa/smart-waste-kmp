@@ -41,9 +41,17 @@ object BucketScreen : Screen {
         }
 
         if (state.rubbishPopupVisible) {
-            AddRubbishPopup(availableRubbishes = state.availableRubbishList) {
-                screenModel.sendEvent(BucketEvent.HideAddRubbishPopup)
-            }
+            AddRubbishPopup(
+                availableRubbishes = state.availableRubbishList,
+                dismissRequest = {
+                    val event = BucketEvent.HideAddRubbishPopup
+                    screenModel.sendEvent(event)
+                },
+                addClicked = { id, count ->
+                    val event = BucketEvent.AddRubbish(id = id, count = count)
+                    screenModel.sendEvent(event)
+                }
+            )
         }
 
         BucketScreenContent(
@@ -74,6 +82,14 @@ fun BucketScreenContent(
                 )
                 .weight(1f),
             rubbishList = state.selectedRubbishList,
+            increaseClicked = { id ->
+                val event = BucketEvent.IncreaseCount(id)
+                sendEvent(event)
+            },
+            decreaseClicked = { id ->
+                val event = BucketEvent.DecreaseCount(id)
+                sendEvent(event)
+            }
         )
         SmartOutlinedButton(
             modifier = Modifier

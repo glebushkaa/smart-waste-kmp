@@ -20,6 +20,7 @@ actual fun AddRubbishPopup(
     modifier: Modifier,
     availableRubbishes: ImmutableList<Rubbish>,
     dismissRequest: () -> Unit,
+    addClicked: (Long, Int) -> Unit,
 ) {
     Dialog(
         onDismissRequest = dismissRequest,
@@ -39,7 +40,10 @@ actual fun AddRubbishPopup(
                     ),
                 availableRubbishes = availableRubbishes,
                 cancelClicked = dismissRequest,
-                addClicked = { dismissRequest() },
+                addClicked = { id, count ->
+                    addClicked(id, count)
+                    dismissRequest()
+                },
                 scanClicked = {},
             )
         },

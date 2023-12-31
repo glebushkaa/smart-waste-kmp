@@ -4,5 +4,6 @@ CREATE TABLE rubbish (
     count INTEGER NOT NULL
 );
 
-getAllRubbishes: SELECT * FROM rubbish;
+getAllRubbishes: SELECT * FROM rubbish WHERE count > 0;
 insertRubbish: INSERT OR REPLACE INTO rubbish(id,name,count) VALUES(?,?,?);
+updateRubbishCount: UPDATE rubbish SET count = ? WHERE id = ?;

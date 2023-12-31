@@ -24,6 +24,7 @@ actual fun AddRubbishPopup(
     modifier: Modifier,
     availableRubbishes: ImmutableList<Rubbish>,
     dismissRequest: () -> Unit,
+    addClicked: (Long, Int) -> Unit,
 ) {
     val modalBottomSheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -42,8 +43,9 @@ actual fun AddRubbishPopup(
                     dismissRequest()
                 }
             },
-            addClicked = {
+            addClicked = { id, count ->
                 scope.launch {
+                    addClicked(id, count)
                     modalBottomSheetState.hide()
                     dismissRequest()
                 }

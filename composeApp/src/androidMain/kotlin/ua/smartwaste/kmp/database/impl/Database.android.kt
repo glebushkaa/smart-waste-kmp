@@ -1,4 +1,4 @@
-package ua.smartwaste.kmp.database
+package ua.smartwaste.kmp.database.impl
 
 import android.content.Context
 import app.cash.sqldelight.db.SqlDriver
