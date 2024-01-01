@@ -9,48 +9,37 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import ua.smartwaste.kmp.model.Rubbish
+import ua.smartwaste.kmp.presentation.screens.bucket.BucketEvent
+import ua.smartwaste.kmp.presentation.screens.bucket.BucketState
+import ua.smartwaste.kmp.presentation.screens.bucket.RubbishPopupMode
 import ua.smartwaste.kmp.presentation.theme.SmartTheme
 
 /**
  * Created by gle.bushkaa email(gleb.mokryy@gmail.com) on 12/27/2023
  */
 
-enum class AddRubbishSheetMode { ADD, SELECT, }
-
 @Composable
 expect fun AddRubbishPopup(
     modifier: Modifier = Modifier,
-    availableRubbishes: ImmutableList<Rubbish> = persistentListOf(),
-    dismissRequest: () -> Unit,
-    addClicked: (Long, Int) -> Unit,
+    rubbishPopupState: BucketState.RubbishPopupState,
+    sendEvent: (BucketEvent) -> Unit,
 )
 
 @Composable
 fun AddRubbishPopupContent(
     modifier: Modifier = Modifier,
-    availableRubbishes: ImmutableList<Rubbish> = persistentListOf(),
+    rubbishPopupState: BucketState.RubbishPopupState,
+    addClicked: () -> Unit,
     cancelClicked: () -> Unit,
-    addClicked: (Long, Int) -> Unit,
+    modeChange: (RubbishPopupMode) -> Unit,
+    selectRubbish: (Long) -> Unit,
     scanClicked: () -> Unit,
+    increaseCount: () -> Unit,
+    decreaseCount: () -> Unit
 ) {
-    var selectedRubbish by remember {
-        mutableStateOf(availableRubbishes.firstOrNull())
-    }
-    var mode by rememberSaveable {
-        mutableStateOf(AddRubbishSheetMode.ADD)
-    }
     AddRubbishAnimatedContent(
         modifier = modifier
             .fillMaxWidth()
@@ -58,33 +47,35 @@ fun AddRubbishPopupContent(
                 color = SmartTheme.palette.surface,
                 shape = SmartTheme.shape.large,
             )
-            .padding(
-                horizontal = SmartTheme.offset.width.huge,
-            ),
-        mode = mode,
+            .padding(horizontal = SmartTheme.offset.width.huge),
+        mode = rubbishPopupState.mode,
     ) {
         when (it) {
-            AddRubbishSheetMode.ADD -> AddRubbishSection(
-                modifier = Modifier.height(SmartTheme.dimension.bucket.addRubbishPopupHeight),
-                rubbishName = selectedRubbish?.name ?: "",
-                selectClicked = { mode = AddRubbishSheetMode.SELECT },
-                addClicked = { count ->
-                    val id = selectedRubbish?.id ?: 0
-                    addClicked(id, count)
-                },
-                cancelClicked = cancelClicked,
-                scanClicked = scanClicked,
-            )
+            RubbishPopupMode.ADD -> {
+                AddRubbishSection(
+                    modifier = Modifier.height(SmartTheme.dimension.bucket.addRubbishPopupHeight),
+                    count = rubbishPopupState.count,
+                    rubbishName = rubbishPopupState.rubbishName,
+                    selectClicked = { modeChange(RubbishPopupMode.SELECT) },
+                    addClicked = addClicked,
+                    cancelClicked = cancelClicked,
+                    scanClicked = scanClicked,
+                    increaseCount = increaseCount,
+                    decreaseCount = decreaseCount
+                )
+            }
 
-            AddRubbishSheetMode.SELECT -> SelectRubbishSection(
-                modifier = Modifier.height(SmartTheme.dimension.bucket.addRubbishPopupHeight),
-                rubbishes = availableRubbishes,
-                selectedRubbishId = selectedRubbish?.id ?: 0,
-                onRubbishClicked = { rubbish ->
-                    mode = AddRubbishSheetMode.ADD
-                    selectedRubbish = rubbish
-                },
-            )
+            RubbishPopupMode.SELECT -> {
+                SelectRubbishSection(
+                    modifier = Modifier.height(SmartTheme.dimension.bucket.addRubbishPopupHeight),
+                    rubbishes = rubbishPopupState.rubbishesList,
+                    selectedRubbishId = rubbishPopupState.rubbishId,
+                    onRubbishClicked = { id ->
+                        selectRubbish(id)
+                        modeChange(RubbishPopupMode.ADD)
+                    },
+                )
+            }
         }
     }
 }
@@ -92,15 +83,15 @@ fun AddRubbishPopupContent(
 @Composable
 private fun AddRubbishAnimatedContent(
     modifier: Modifier = Modifier,
-    mode: AddRubbishSheetMode,
-    content: @Composable AnimatedContentScope.(targetState: AddRubbishSheetMode) -> Unit,
+    mode: RubbishPopupMode,
+    content: @Composable AnimatedContentScope.(targetState: RubbishPopupMode) -> Unit,
 ) {
     AnimatedContent(
         modifier = modifier,
         targetState = mode,
         contentAlignment = Alignment.Center,
         transitionSpec = {
-            if (targetState == AddRubbishSheetMode.ADD) {
+            if (targetState == RubbishPopupMode.ADD) {
                 slideInHorizontally(
                     initialOffsetX = { -it * 2 },
                 ) togetherWith slideOutHorizontally(

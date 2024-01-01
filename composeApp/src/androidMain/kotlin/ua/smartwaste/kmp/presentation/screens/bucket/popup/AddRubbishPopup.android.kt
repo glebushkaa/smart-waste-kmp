@@ -10,9 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
-import ua.smartwaste.kmp.model.Rubbish
+import ua.smartwaste.kmp.presentation.screens.bucket.BucketEvent
+import ua.smartwaste.kmp.presentation.screens.bucket.BucketState
 import ua.smartwaste.kmp.presentation.theme.SmartTheme
 
 /**
@@ -22,36 +22,50 @@ import ua.smartwaste.kmp.presentation.theme.SmartTheme
 @Composable
 actual fun AddRubbishPopup(
     modifier: Modifier,
-    availableRubbishes: ImmutableList<Rubbish>,
-    dismissRequest: () -> Unit,
-    addClicked: (Long, Int) -> Unit,
+    rubbishPopupState: BucketState.RubbishPopupState,
+    sendEvent: (BucketEvent) -> Unit,
 ) {
     val modalBottomSheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
     ModalBottomSheet(
         modifier = modifier.defaultMinSize(minHeight = 400.dp),
-        onDismissRequest = dismissRequest,
+        onDismissRequest = {
+            sendEvent(BucketEvent.HideRubbishPopup)
+        },
         containerColor = SmartTheme.palette.surface,
         sheetState = modalBottomSheetState,
     ) {
         AddRubbishPopupContent(
-            availableRubbishes = availableRubbishes,
+            rubbishPopupState = rubbishPopupState,
             cancelClicked = {
                 scope.launch {
                     modalBottomSheetState.hide()
-                    dismissRequest()
+                    sendEvent(BucketEvent.HideRubbishPopup)
                 }
             },
-            addClicked = { id, count ->
+            addClicked = {
                 scope.launch {
-                    addClicked(id, count)
+                    sendEvent(BucketEvent.AddRubbish)
                     modalBottomSheetState.hide()
-                    dismissRequest()
+                    sendEvent(BucketEvent.HideRubbishPopup)
                 }
             },
-            scanClicked = {
+            scanClicked = { sendEvent(BucketEvent.ScanClicked) },
+            selectRubbish = { id ->
+                val event = BucketEvent.SelectRubbish(id)
+                sendEvent(event)
             },
+            modeChange = { mode ->
+                val event = BucketEvent.ChangeRubbishPopupMode(mode)
+                sendEvent(event)
+            },
+            increaseCount = {
+                sendEvent(BucketEvent.IncreaseRubbishPopupCount)
+            },
+            decreaseCount = {
+                sendEvent(BucketEvent.DecreaseRubbishPopupCount)
+            }
         )
     }
 }

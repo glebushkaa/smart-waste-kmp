@@ -1,5 +1,7 @@
 package ua.smartwaste.kmp.data.repository
 
+import kotlinx.collections.immutable.ImmutableList
+import ua.smartwaste.kmp.core.mapToImmutable
 import ua.smartwaste.kmp.data.mapper.toQuest
 import ua.smartwaste.kmp.data.mapper.toUser
 import ua.smartwaste.kmp.domain.exception.AuthException
@@ -21,8 +23,8 @@ class UserRepositoryImpl(
     private val userApi: UserApi,
 ) : UserRepository {
 
-    override suspend fun getQuests(): List<Quest> {
-        return userApi.getQuests().map { it.toQuest() }
+    override suspend fun getQuests(): ImmutableList<Quest> {
+        return userApi.getQuests().mapToImmutable { it.toQuest() }
     }
 
     override suspend fun getUser(): User {

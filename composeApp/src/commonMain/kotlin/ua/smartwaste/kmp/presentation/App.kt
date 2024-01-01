@@ -4,6 +4,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -29,7 +30,7 @@ fun App() {
             val visible by remember {
                 derivedStateOf {
                     navigator.lastItem !is SplashScreen &&
-                        navigator.lastItem !is LoginScreen
+                            navigator.lastItem !is LoginScreen
                 }
             }
             Scaffold(
@@ -59,7 +60,7 @@ fun App() {
                         visible = visible,
                     )
                 },
-                backgroundColor = SmartTheme.palette.background,
+                containerColor = SmartTheme.palette.background,
             )
         }
     }

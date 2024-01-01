@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalFoundationApi::class, ExperimentalFoundationApi::class)
-
 package ua.smartwaste.kmp.presentation.screens.bucket
 
 import androidx.compose.foundation.BorderStroke
@@ -40,17 +38,10 @@ object BucketScreen : Screen {
             SmartLoader()
         }
 
-        if (state.rubbishPopupVisible) {
+        if (state.rubbishPopupState.visible) {
             AddRubbishPopup(
-                availableRubbishes = state.availableRubbishList,
-                dismissRequest = {
-                    val event = BucketEvent.HideAddRubbishPopup
-                    screenModel.sendEvent(event)
-                },
-                addClicked = { id, count ->
-                    val event = BucketEvent.AddRubbish(id = id, count = count)
-                    screenModel.sendEvent(event)
-                }
+                rubbishPopupState = state.rubbishPopupState,
+                sendEvent = screenModel::sendEvent,
             )
         }
 
@@ -67,7 +58,7 @@ fun BucketScreenContent(
     sendEvent: (BucketEvent) -> Unit = {},
 ) {
     val dumpButtonEnabled by remember {
-        derivedStateOf { state.selectedRubbishList.isNotEmpty() }
+        derivedStateOf { state.selectedRubbishes.isNotEmpty() }
     }
 
     Column(
@@ -81,7 +72,7 @@ fun BucketScreenContent(
                     end = SmartTheme.offset.width.huge,
                 )
                 .weight(1f),
-            rubbishList = state.selectedRubbishList,
+            rubbishList = state.selectedRubbishes,
             increaseClicked = { id ->
                 val event = BucketEvent.IncreaseCount(id)
                 sendEvent(event)
@@ -97,7 +88,9 @@ fun BucketScreenContent(
                     vertical = SmartTheme.offset.height.regular,
                     horizontal = SmartTheme.offset.width.huge,
                 )
-                .height(60.dp)
+                .height(
+                    SmartTheme.dimension.bucket.addButtonHeight
+                )
                 .fillMaxWidth(),
             border = BorderStroke(
                 width = 2.dp,
@@ -117,7 +110,9 @@ fun BucketScreenContent(
                     start = SmartTheme.offset.width.huge,
                     end = SmartTheme.offset.width.huge,
                 )
-                .height(60.dp)
+                .height(
+                    SmartTheme.dimension.bucket.recyclerPointsButtonHeight
+                )
                 .fillMaxWidth(),
             text = "Show recycle points",
             textStyle = SmartTheme.typography.bodyLarge,

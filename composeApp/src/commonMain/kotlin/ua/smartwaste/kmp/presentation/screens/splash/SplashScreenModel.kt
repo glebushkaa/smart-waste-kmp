@@ -1,11 +1,11 @@
 package ua.smartwaste.kmp.presentation.screens.splash
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import ua.smartwaste.kmp.domain.usecase.user.GetUserUseCase
+import ua.smartwaste.kmp.presentation.core.modelScope
 
 /**
  * Created by gle.bushkaa email(gleb.mokryy@gmail.com) on 12/26/2023
@@ -24,7 +24,7 @@ class SplashScreenModel(
         }
     }
 
-    private fun validateToken() = screenModelScope.launch {
+    private fun validateToken() = modelScope.launch {
         val result = getUserUseCase()
         val effect = if (result.isSuccess) {
             SplashNavigationEvent.NavigateToProfile

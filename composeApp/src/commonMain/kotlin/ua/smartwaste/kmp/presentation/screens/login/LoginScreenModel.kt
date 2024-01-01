@@ -1,13 +1,13 @@
 package ua.smartwaste.kmp.presentation.screens.login
 
 import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ua.smartwaste.kmp.domain.usecase.auth.LoginUseCase
 import ua.smartwaste.kmp.domain.usecase.auth.RegisterUseCase
+import ua.smartwaste.kmp.presentation.core.modelScope
 
 /**
  * Created by gle.bushkaa email(gleb.mokryy@gmail.com) on 12/25/2023
@@ -28,7 +28,7 @@ class LoginScreenModel(
         }
     }
 
-    private fun login() = screenModelScope.launch {
+    private fun login() = modelScope.launch {
         mutableState.update { it.copy(loaderVisible = true) }
         val params = LoginUseCase.Params(
             email = state.value.email,
@@ -40,7 +40,7 @@ class LoginScreenModel(
         mutableState.update { it.copy(loaderVisible = false) }
     }
 
-    private fun register() = screenModelScope.launch {
+    private fun register() = modelScope.launch {
         mutableState.update { it.copy(loaderVisible = true) }
         val params = RegisterUseCase.Params(
             username = state.value.username,

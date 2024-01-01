@@ -1,7 +1,6 @@
 package ua.smartwaste.kmp.data.repository
 
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import ua.smartwaste.kmp.core.mapToImmutable
@@ -9,7 +8,6 @@ import ua.smartwaste.kmp.data.mapper.toRubbish
 import ua.smartwaste.kmp.data.mapper.toRubbishEntity
 import ua.smartwaste.kmp.database.api.ItemsDatabase
 import ua.smartwaste.kmp.domain.repository.ItemsRepository
-import ua.smartwaste.kmp.log.debug
 import ua.smartwaste.kmp.model.Rubbish
 import ua.smartwaste.kmp.network.api.items.ItemsApi
 

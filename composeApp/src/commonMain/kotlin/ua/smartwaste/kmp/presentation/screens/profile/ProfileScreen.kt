@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -65,28 +65,6 @@ object ProfileScreen : Screen {
                 }
             }
         }
-    }
-}
-
-// @Preview
-@Composable
-fun ProfileScreenContentPreview() {
-    SmartTheme {
-        val state = ProfileState(
-            username = "Gleb",
-            email = "E6HhA@example.com",
-            currentProgress = 0,
-            requiredProgress = 10,
-            level = 1,
-            daysCount = 0,
-            passedProgress = 0f,
-            bucketsCount = 2,
-        )
-
-        ProfileScreenContent(
-            state = state,
-            sendEvent = {},
-        )
     }
 }
 
@@ -354,7 +332,9 @@ private fun QuestItem(
     }
     Box(
         modifier = modifier
-            .height(50.dp)
+            .height(
+                SmartTheme.dimension.profile.questItemHeight
+            )
             .fillMaxWidth()
             .background(
                 color = background,

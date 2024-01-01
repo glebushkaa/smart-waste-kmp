@@ -25,6 +25,7 @@ import ua.smartwaste.kmp.presentation.components.SmartIconButton
 import ua.smartwaste.kmp.presentation.components.SmartOutlinedButton
 import ua.smartwaste.kmp.presentation.core.ResourceType
 import ua.smartwaste.kmp.presentation.core.painterDrawableResource
+import ua.smartwaste.kmp.presentation.screens.bucket.BucketEvent
 import ua.smartwaste.kmp.presentation.screens.bucket.components.DEFAULT_MAX_VALUE
 import ua.smartwaste.kmp.presentation.screens.bucket.components.DEFAULT_MIN_VALUE
 import ua.smartwaste.kmp.presentation.screens.bucket.components.RubbishCounter
@@ -39,14 +40,15 @@ import kotlin.math.min
 @Composable
 fun AddRubbishSection(
     modifier: Modifier = Modifier,
+    count: Int,
+    increaseCount: () -> Unit,
+    decreaseCount: () -> Unit,
     rubbishName: String,
     selectClicked: () -> Unit,
-    addClicked: (Int) -> Unit,
+    addClicked: () -> Unit,
     cancelClicked: () -> Unit,
     scanClicked: () -> Unit,
 ) {
-    var count by rememberSaveable { mutableIntStateOf(0) }
-
     Column(modifier = modifier) {
         Text(
             text = "Add rubbish",
@@ -82,8 +84,8 @@ fun AddRubbishSection(
                     shape = SmartTheme.shape.medium,
                 ),
             count = count,
-            increaseClicked = { count = min(count + 1, DEFAULT_MAX_VALUE) },
-            decreaseClicked = { count = max(count - 1, DEFAULT_MIN_VALUE) },
+            increaseClicked = increaseCount,
+            decreaseClicked = decreaseCount,
         )
         Spacer(modifier = Modifier.height(SmartTheme.offset.height.regular))
         SmartOutlinedButton(
@@ -97,9 +99,7 @@ fun AddRubbishSection(
             shape = SmartTheme.shape.medium,
             text = "Add",
             textStyle = SmartTheme.typography.bodyLarge,
-            onClick = {
-                addClicked(count)
-            },
+            onClick = addClicked,
         )
         Spacer(modifier = Modifier.height(SmartTheme.offset.height.regular))
         SmartButton(
@@ -125,7 +125,9 @@ private fun SelectRubbishButton(
     selectClicked: () -> Unit,
 ) {
     SmartButton(
-        modifier = modifier.height(60.dp),
+        modifier = modifier.height(
+            SmartTheme.dimension.bucket.selectRubbishButtonHeight
+        ),
         content = {
             Text(
                 modifier = Modifier.weight(1f),
@@ -137,7 +139,9 @@ private fun SelectRubbishButton(
             )
             Spacer(modifier = Modifier.width(SmartTheme.offset.width.regular))
             Icon(
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier.size(
+                    SmartTheme.dimension.bucket.arrowNextIconSize
+                ),
                 painter = painterDrawableResource(
                     id = "ic_arrow_next",
                     type = ResourceType.XML,

@@ -23,7 +23,7 @@ import ua.smartwaste.kmp.presentation.theme.SmartTheme
 @Composable
 fun SelectRubbishSection(
     modifier: Modifier = Modifier,
-    onRubbishClicked: (Rubbish) -> Unit = {},
+    onRubbishClicked: (Long) -> Unit = {},
     rubbishes: ImmutableList<Rubbish> = persistentListOf(),
     selectedRubbishId: Long? = null,
 ) {

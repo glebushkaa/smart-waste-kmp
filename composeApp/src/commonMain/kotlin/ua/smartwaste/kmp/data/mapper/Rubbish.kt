@@ -1,6 +1,6 @@
 package ua.smartwaste.kmp.data.mapper
 
-import kotlinx.collections.immutable.toImmutableList
+import ua.smartwaste.kmp.core.mapToImmutable
 import ua.smartwaste.kmp.database.api.entity.RubbishEntity
 import ua.smartwaste.kmp.model.Rubbish
 import ua.smartwaste.kmp.network.api.items.model.NetworkRubbish
@@ -12,9 +12,9 @@ import ua.smartwaste.kmp.network.api.items.model.NetworkRubbish
 fun NetworkRubbish.toRubbish(): Rubbish {
     return Rubbish(
         name = name ?: "",
-        categories = categories.map {
+        categories = categories.mapToImmutable {
             it.toCategory()
-        }.toImmutableList(),
+        },
         id = id ?: 0,
     )
 }

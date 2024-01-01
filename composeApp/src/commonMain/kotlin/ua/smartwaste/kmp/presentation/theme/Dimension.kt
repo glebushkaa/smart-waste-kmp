@@ -35,6 +35,7 @@ data class Dimension(
         val profileImage: Dp = 90.dp,
         val levelProgressHeight: Dp = 8.dp,
         val userInfoCardSize: Dp = 62.dp,
+        val questItemHeight: Dp = 40.dp
     )
 
     @Immutable
@@ -47,12 +48,15 @@ data class Dimension(
     data class BucketDimension(
         val rubbishItemCountButtonSize: Dp = 40.dp,
         val rubbishItemTextHeight: Dp = 32.dp,
-        val addRubbishPopupHeight: Dp = 330.dp,
+        val addRubbishPopupHeight: Dp = 290.dp,
         val counterHeight: Dp = 44.dp,
         val addButtonHeight: Dp = 44.dp,
         val cancelButtonHeight: Dp = 44.dp,
         val counterButtonSize: Dp = 32.dp,
         val counterTextWidth: Dp = 26.dp,
+        val selectRubbishButtonHeight: Dp = 44.dp,
+        val arrowNextIconSize: Dp = 18.dp,
+        val recyclerPointsButtonHeight: Dp = 44.dp,
     )
 }
 
@@ -74,12 +78,15 @@ private fun buildBucketDimension(
     return Dimension.BucketDimension(
         rubbishItemCountButtonSize = buildGeneralDimension(40.dp.value),
         rubbishItemTextHeight = buildHeightDimension(32.dp.value),
-        addRubbishPopupHeight = buildHeightDimension(330.dp.value),
+        addRubbishPopupHeight = buildHeightDimension(290.dp.value),
         counterHeight = buildHeightDimension(44.dp.value),
         addButtonHeight = buildHeightDimension(44.dp.value),
         cancelButtonHeight = buildHeightDimension(44.dp.value),
         counterButtonSize = buildGeneralDimension(32.dp.value),
         counterTextWidth = buildWidthDimension(32.dp.value),
+        selectRubbishButtonHeight = buildHeightDimension(44.dp.value),
+        arrowNextIconSize = buildGeneralDimension(18.dp.value),
+        recyclerPointsButtonHeight = buildHeightDimension(44.dp.value),
     )
 }
 
@@ -110,6 +117,7 @@ private fun buildProfileDimension(
         profileImage = buildGeneralDimension(90.dp.value),
         levelProgressHeight = buildHeightDimension(8.dp.value),
         userInfoCardSize = buildGeneralDimension(62.dp.value),
+        questItemHeight = buildHeightDimension(40.dp.value),
     )
 }
 

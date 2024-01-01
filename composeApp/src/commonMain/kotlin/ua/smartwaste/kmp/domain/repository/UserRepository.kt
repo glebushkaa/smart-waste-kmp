@@ -1,5 +1,6 @@
 package ua.smartwaste.kmp.domain.repository
 
+import kotlinx.collections.immutable.ImmutableList
 import ua.smartwaste.kmp.model.Quest
 import ua.smartwaste.kmp.model.User
 
@@ -11,5 +12,5 @@ interface UserRepository {
 
     suspend fun getUser(): User
 
-    suspend fun getQuests(): List<Quest>
+    suspend fun getQuests(): ImmutableList<Quest>
 }

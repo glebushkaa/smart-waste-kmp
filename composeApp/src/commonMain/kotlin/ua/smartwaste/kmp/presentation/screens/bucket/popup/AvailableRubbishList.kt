@@ -29,7 +29,7 @@ fun AvailableRubbishList(
     modifier: Modifier = Modifier,
     selectedRubbishId: Long? = null,
     rubbishes: ImmutableList<Rubbish> = persistentListOf(),
-    onRubbishClicked: (Rubbish) -> Unit = {},
+    onRubbishClicked: (Long) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier,
@@ -53,7 +53,7 @@ fun AvailableRubbishList(
                         shape = SmartTheme.shape.medium,
                     )
                     .clickableWithoutRipple {
-                        onRubbishClicked(it)
+                        onRubbishClicked(it.id)
                     },
                 contentAlignment = Alignment.CenterStart,
             ) {
