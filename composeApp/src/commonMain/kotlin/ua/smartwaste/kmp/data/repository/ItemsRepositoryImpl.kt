@@ -20,6 +20,10 @@ class ItemsRepositoryImpl(
     private val itemsDatabase: ItemsDatabase,
 ) : ItemsRepository {
 
+    override suspend fun scanItem(path: String): Rubbish? {
+        return itemsApi.scanRubbish(path)?.toRubbish()
+    }
+
     override suspend fun getAvailableRubbishes(): ImmutableList<Rubbish> {
         return itemsApi.getAvailableRubbishes().mapToImmutable {
             it.toRubbish()

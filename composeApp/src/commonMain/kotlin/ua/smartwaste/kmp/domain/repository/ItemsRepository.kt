@@ -12,9 +12,12 @@ interface ItemsRepository {
 
     suspend fun getAvailableRubbishes(): ImmutableList<Rubbish>
 
+    suspend fun scanItem(path: String): Rubbish?
+
     fun addRubbish(rubbish: Rubbish)
 
     fun getAllRubbishesFlow(): Flow<ImmutableList<Rubbish>>
 
     fun updateRubbishCount(id: Long, count: Int)
+
 }

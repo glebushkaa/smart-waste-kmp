@@ -9,4 +9,6 @@ import ua.smartwaste.kmp.network.api.items.model.NetworkRubbish
 interface ItemsApi {
 
     suspend fun getAvailableRubbishes(): List<NetworkRubbish>
+
+    suspend fun scanRubbish(path: String): NetworkRubbish?
 }

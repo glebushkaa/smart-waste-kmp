@@ -11,4 +11,5 @@ val modules = mutableListOf(
     screenModelModule,
     databaseModule,
     useCaseModule,
+    fileModule,
 )

@@ -62,14 +62,17 @@ val networkModule = module {
 
     single<HttpClient>(named(ITEMS_HTTP_CLIENT)) {
         val authPreferences = get<AuthPreferences>()
-        buildHttpClient(additionalPath = "items") {
+        buildHttpClient {
             val token = authPreferences.token ?: ""
             contentType(ContentType.Application.Json)
             header(HttpHeaders.Authorization, token)
         }
     }
     single<ItemsApi> {
-        ItemsApiImpl(itemsHttpClient = get(named(ITEMS_HTTP_CLIENT)))
+        ItemsApiImpl(
+            itemsHttpClient = get(named(ITEMS_HTTP_CLIENT)),
+            fileUploader = get()
+        )
     }
 }
 

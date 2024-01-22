@@ -2,11 +2,15 @@ package ua.smartwaste.kmp.presentation.screens.bucket
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ua.smartwaste.kmp.domain.usecase.items.AddRubbishUseCase
 import ua.smartwaste.kmp.domain.usecase.items.GetAllRubbishesFlowUseCase
 import ua.smartwaste.kmp.domain.usecase.items.GetAvailableRubbishesUseCase
+import ua.smartwaste.kmp.domain.usecase.items.ScanItemUseCase
 import ua.smartwaste.kmp.domain.usecase.items.UpdateRubbishCountUseCase
 import ua.smartwaste.kmp.log.error
 import ua.smartwaste.kmp.model.Rubbish
@@ -20,8 +24,12 @@ class BucketScreenModel(
     private val getAvailableRubbishesUseCase: GetAvailableRubbishesUseCase,
     private val getAllRubbishesFlowUseCase: GetAllRubbishesFlowUseCase,
     private val addRubbishUseCase: AddRubbishUseCase,
-    private val updateRubbishCountUseCase: UpdateRubbishCountUseCase
+    private val updateRubbishCountUseCase: UpdateRubbishCountUseCase,
+    private val scanItemUseCase: ScanItemUseCase
 ) : StateScreenModel<BucketState>(BucketState()) {
+
+    private val _sideEffect = Channel<BucketSideEffect?>()
+    val sideEffect = _sideEffect.receiveAsFlow()
 
     init {
         collectAllRubbishes()
@@ -30,47 +38,54 @@ class BucketScreenModel(
 
     fun sendEvent(event: BucketEvent) {
         when (event) {
-            BucketEvent.HideRubbishPopup -> {
-                changeRubbishPopupVisibility(false)
-            }
-
-            BucketEvent.ShowAddRubbishPopup -> {
-                changeRubbishPopupVisibility(true)
-            }
-
             is BucketEvent.AddRubbish -> {
                 val popupState = mutableState.value.rubbishPopupState
                 addRubbish(id = popupState.rubbishId, count = popupState.count)
             }
 
-            is BucketEvent.DecreaseCount -> {
-                decreaseCount(id = event.id)
-            }
-
-            is BucketEvent.IncreaseCount -> {
-                increaseCount(id = event.id)
-            }
-
-            is BucketEvent.ChangeRubbishPopupMode -> {
-                mutableState.update {
-                    val popupState = it.rubbishPopupState.copy(mode = event.mode)
-                    it.copy(rubbishPopupState = popupState)
-                }
-            }
-
+            BucketEvent.HideRubbishPopup -> changeRubbishPopupVisibility(false)
+            BucketEvent.ShowAddRubbishPopup -> changeRubbishPopupVisibility(true)
+            is BucketEvent.DecreaseCount -> decreaseCount(id = event.id)
+            is BucketEvent.IncreaseCount -> increaseCount(id = event.id)
+            is BucketEvent.ChangeRubbishPopupMode -> changePopupMode(event.mode)
             BucketEvent.DecreaseRubbishPopupCount -> decreaseRubbishPopupCount()
             BucketEvent.IncreaseRubbishPopupCount -> increaseRubbishPopupCount()
-            BucketEvent.ScanClicked -> {
-                // TODO
-            }
-
+            BucketEvent.ScanClicked -> _sideEffect.trySend(BucketSideEffect.ScanRubbish)
             is BucketEvent.SelectRubbish -> selectRubbish(event.id)
+            is BucketEvent.ProcessScannedItemPath -> scanImage(event.path)
+            is BucketEvent.SendToast -> sendToast(event.message)
+            BucketEvent.ClearSideEffect -> _sideEffect.trySend(null)
         }
     }
 
-    private fun selectRubbish(id: Long) {
-        val list = mutableState.value.rubbishPopupState.rubbishesList
-        val rubbish = list.findRubbishById(id)
+    private fun sendToast(message: String) {
+        val effect = BucketSideEffect.Toast(message)
+        _sideEffect.trySend(effect)
+    }
+
+    private fun changePopupMode(mode: RubbishPopupMode) = mutableState.update {
+        val popupState = it.rubbishPopupState.copy(mode = mode)
+        it.copy(rubbishPopupState = popupState)
+    }
+
+    private fun scanImage(path: String) = modelScope.launch {
+        changeLoaderVisibility(true)
+        val params = ScanItemUseCase.Params(path)
+        val rubbish = scanItemUseCase(params).getOrNull()
+        changeLoaderVisibility(false)
+        if (rubbish == null) {
+            val effect = BucketSideEffect.Toast("Item was not recognized")
+            _sideEffect.send(effect)
+            return@launch
+        }
+        selectRubbish(rubbish)
+    }
+
+    private fun changeLoaderVisibility(visible: Boolean) = mutableState.update {
+        it.copy(loaderVisible = visible)
+    }
+
+    private fun selectRubbish(rubbish: Rubbish) {
         val popupState = mutableState.value.rubbishPopupState.copy(
             rubbishId = rubbish.id,
             rubbishName = rubbish.name
@@ -78,6 +93,12 @@ class BucketScreenModel(
         mutableState.update { state ->
             state.copy(rubbishPopupState = popupState)
         }
+    }
+
+    private fun selectRubbish(id: Long) {
+        val list = mutableState.value.rubbishPopupState.rubbishesList
+        val rubbish = list.findRubbishById(id)
+        selectRubbish(rubbish)
     }
 
     private fun decreaseRubbishPopupCount() = mutableState.update { state ->

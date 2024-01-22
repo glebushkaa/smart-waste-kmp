@@ -11,9 +11,10 @@ import ua.smartwaste.kmp.di.modules
  * Created by gle.bushkaa email(gleb.mokryy@gmail.com) on 12/25/2023
  */
 
+
 class SmartApp : Application() {
 
-    override fun onCreate() {
+        override fun onCreate() {
         super.onCreate()
         startKoin {
             androidContext(this@SmartApp)

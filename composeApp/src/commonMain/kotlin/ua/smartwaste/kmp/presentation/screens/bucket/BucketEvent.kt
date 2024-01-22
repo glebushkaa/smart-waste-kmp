@@ -19,4 +19,11 @@ sealed interface BucketEvent {
 
     data object IncreaseRubbishPopupCount : BucketEvent
     data object DecreaseRubbishPopupCount : BucketEvent
+
+    data class ProcessScannedItemPath(
+        val path: String
+    ) : BucketEvent
+    data class SendToast(val message: String): BucketEvent
+
+    data object ClearSideEffect: BucketEvent
 }

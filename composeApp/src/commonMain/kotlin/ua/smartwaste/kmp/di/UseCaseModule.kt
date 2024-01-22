@@ -13,6 +13,7 @@ import ua.smartwaste.kmp.domain.usecase.items.GetAvailableRubbishesUseCase
 import ua.smartwaste.kmp.domain.usecase.items.GetAllRubbishesFlowUseCase
 import ua.smartwaste.kmp.domain.usecase.items.AddRubbishUseCase
 import ua.smartwaste.kmp.domain.usecase.items.UpdateRubbishCountUseCase
+import ua.smartwaste.kmp.domain.usecase.items.ScanItemUseCase
 import ua.smartwaste.kmp.domain.usecase.user.GetQuestsUseCase
 import ua.smartwaste.kmp.domain.usecase.user.GetUserUseCase
 
@@ -34,4 +35,5 @@ val useCaseModule = module {
     factoryOf(::GetAllRubbishesFlowUseCase)
     factoryOf(::AddRubbishUseCase)
     factoryOf(::UpdateRubbishCountUseCase)
+    factoryOf(::ScanItemUseCase)
 }

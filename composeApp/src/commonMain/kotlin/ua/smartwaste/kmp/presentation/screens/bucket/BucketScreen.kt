@@ -1,7 +1,6 @@
 package ua.smartwaste.kmp.presentation.screens.bucket
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,6 +32,7 @@ object BucketScreen : Screen {
     override fun Content() {
         val screenModel = getScreenModel<BucketScreenModel>()
         val state by screenModel.state.collectAsState()
+        val sideEffect by screenModel.sideEffect.collectAsState(null)
 
         if (state.loaderVisible) {
             SmartLoader()
@@ -45,12 +45,20 @@ object BucketScreen : Screen {
             )
         }
 
-        BucketScreenContent(
+        BucketScreen(
             state = state,
+            sideEffect = sideEffect,
             sendEvent = screenModel::sendEvent,
         )
     }
 }
+
+@Composable
+expect fun BucketScreen(
+    state: BucketState,
+    sideEffect: BucketSideEffect?,
+    sendEvent: (BucketEvent) -> Unit,
+)
 
 @Composable
 fun BucketScreenContent(
