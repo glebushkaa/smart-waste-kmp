@@ -3,7 +3,7 @@ package ua.smartwaste.kmp.presentation.screens.bucket
 import androidx.compose.runtime.Stable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import ua.smartwaste.kmp.model.Rubbish
+import ua.gleb.smartwaste.model.Rubbish
 
 /**
  * Created by gle.bushkaa email(gleb.mokryy@gmail.com) on 12/27/2023

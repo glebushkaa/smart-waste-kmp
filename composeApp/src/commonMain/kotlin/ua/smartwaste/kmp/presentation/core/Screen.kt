@@ -6,7 +6,7 @@ import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
 import cafe.adriel.voyager.core.concurrent.PlatformMainDispatcher
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.ScreenModelStore
-import ua.smartwaste.kmp.log.error
+import ua.gleb.smartwaste.log.error
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope

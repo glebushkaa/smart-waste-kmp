@@ -5,9 +5,9 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ua.smartwaste.kmp.domain.usecase.auth.LogOutUseCase
-import ua.smartwaste.kmp.domain.usecase.user.GetQuestsUseCase
-import ua.smartwaste.kmp.domain.usecase.user.GetUserUseCase
+import ua.gleb.smartwaste.domain.usecase.auth.LogOutUseCase
+import ua.gleb.smartwaste.domain.usecase.user.GetQuestsUseCase
+import ua.gleb.smartwaste.domain.usecase.user.GetUserUseCase
 import ua.smartwaste.kmp.presentation.core.modelScope
 
 /**
@@ -17,7 +17,7 @@ import ua.smartwaste.kmp.presentation.core.modelScope
 class ProfileScreenModel(
     private val getUserUseCase: GetUserUseCase,
     private val getQuestsUseCase: GetQuestsUseCase,
-    private val logOutUseCase: LogOutUseCase,
+    private val logOutUseCase: ua.gleb.smartwaste.domain.usecase.auth.LogOutUseCase,
 ) : StateScreenModel<ProfileState>(emptyProfileState) {
 
     private val _navigationEvent = Channel<ProfileNavigationEvent>()

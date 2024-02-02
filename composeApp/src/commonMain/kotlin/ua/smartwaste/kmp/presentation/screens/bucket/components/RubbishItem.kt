@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import ua.smartwaste.kmp.model.Rubbish
+import ua.gleb.smartwaste.model.Rubbish
 import ua.smartwaste.kmp.presentation.theme.SmartTheme
 
 /**

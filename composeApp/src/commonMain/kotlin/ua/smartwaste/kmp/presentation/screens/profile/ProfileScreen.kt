@@ -33,7 +33,7 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import ua.smartwaste.kmp.model.Quest
+import ua.gleb.smartwaste.model.Quest
 import ua.smartwaste.kmp.presentation.core.ResourceType
 import ua.smartwaste.kmp.presentation.core.painterDrawableResource
 import ua.smartwaste.kmp.presentation.screens.login.LoginScreen

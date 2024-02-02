@@ -13,7 +13,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import ua.smartwaste.kmp.model.Rubbish
+import ua.gleb.smartwaste.model.Rubbish
 import ua.smartwaste.kmp.presentation.theme.SmartTheme
 
 /**

@@ -5,8 +5,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ua.smartwaste.kmp.domain.usecase.auth.LoginUseCase
-import ua.smartwaste.kmp.domain.usecase.auth.RegisterUseCase
+import ua.gleb.smartwaste.domain.usecase.auth.LoginUseCase
+import ua.gleb.smartwaste.domain.usecase.auth.RegisterUseCase
 import ua.smartwaste.kmp.presentation.core.modelScope
 
 /**

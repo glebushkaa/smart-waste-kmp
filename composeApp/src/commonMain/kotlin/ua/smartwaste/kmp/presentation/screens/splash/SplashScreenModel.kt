@@ -4,7 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import ua.smartwaste.kmp.domain.usecase.user.GetUserUseCase
+import ua.gleb.smartwaste.domain.usecase.user.GetUserUseCase
 import ua.smartwaste.kmp.presentation.core.modelScope
 
 /**
