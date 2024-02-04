@@ -1,15 +1,15 @@
 package ua.gleb.smartwaste.plugins
 
-import io.ktor.server.application.Application
-import io.ktor.server.application.call
-import io.ktor.server.response.respondText
-import io.ktor.server.routing.get
-import io.ktor.server.routing.routing
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import ua.gleb.smartwaste.routes.loginRoute
 import ua.gleb.smartwaste.routes.userRoute
 
 fun Application.configureRouting() {
     routing {
         userRoute()
+        loginRoute()
         get {
             call.respondText { "Hello world!" }
         }

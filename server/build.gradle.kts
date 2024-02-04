@@ -16,5 +16,6 @@ dependencies {
     implementation(projects.shared)
     implementation(libs.bundles.ktor.server)
     implementation(libs.logback.classic)
+    implementation(libs.h2.database)
     implementation(libs.bundles.exposed)
 }

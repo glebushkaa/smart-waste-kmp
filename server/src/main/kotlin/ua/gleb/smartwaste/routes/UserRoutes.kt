@@ -1,36 +1,48 @@
 package ua.gleb.smartwaste.routes
 
-import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.call
-import io.ktor.server.response.respondText
-import io.ktor.server.routing.Routing
-import io.ktor.server.routing.get
-import io.ktor.server.routing.route
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import ua.gleb.smartwaste.network.user.dto.NetworkUserDto
+import org.koin.ktor.ext.inject
+import ua.gleb.smartwaste.data.mapper.toNetworkUser
+import ua.gleb.smartwaste.data.repository.user.UserRepository
+import ua.gleb.smartwaste.network.user.dto.NetworkQuestDto
+import ua.gleb.smartwaste.network.user.dto.NetworkQuestsListDto
 
 fun Routing.userRoute() {
+    val userRepository by inject<UserRepository>()
     route("/self/") {
-        get {
-            val dto = NetworkUserDto(
-                id = "1",
-                email = "gleb.mokryy@gmail.com",
-                username = "gle.bushkaa",
-                score = 1200,
-                createdAt = "2023-11-17T15:20:02.759Z",
-                buckets = 10
-            )
-            val json = Json.encodeToString(dto)
+        get("users") {
+            val users = userRepository.getAllUsers().map { user ->
+                user.toNetworkUser()
+            }
+            val json = Json.encodeToString(users)
             call.respondText(
                 text = json,
                 status = HttpStatusCode.OK,
                 contentType = ContentType.Application.Json
             )
         }
-        get("quests") {
 
+        get("quests") {
+            val quest = NetworkQuestDto(
+                id = 1,
+                name = "Collect garbage",
+                total = 2,
+                completed = 3
+            )
+            val listDto = NetworkQuestsListDto(
+                quests = listOf(quest)
+            )
+            val json = Json.encodeToString(listDto)
+            call.respondText(
+                text = json,
+                status = HttpStatusCode.OK,
+                contentType = ContentType.Application.Json
+            )
         }
     }
 }

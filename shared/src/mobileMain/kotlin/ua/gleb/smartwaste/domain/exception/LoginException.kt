@@ -5,6 +5,6 @@ package ua.gleb.smartwaste.domain.exception
  */
 
 data class LoginException(
-    val field: ua.gleb.smartwaste.domain.exception.LoginField? = null,
+    val field: LoginField? = null,
     override val message: String,
 ) : Throwable()
