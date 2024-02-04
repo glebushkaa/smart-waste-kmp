@@ -1,15 +1,16 @@
 package ua.smartwaste.kmp
 
 import android.app.Application
-import io.github.aakira.napier.DebugAntilog
-import io.github.aakira.napier.Napier
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
-import ua.smartwaste.kmp.di.modules
+import ua.gleb.smartwaste.di.modules
+import ua.gleb.smartwaste.log.initializeLogger
+import ua.smartwaste.kmp.presentation.di.screenModelModule
 
 /**
  * Created by gle.bushkaa email(gleb.mokryy@gmail.com) on 12/25/2023
  */
+
 
 class SmartApp : Application() {
 
@@ -17,8 +18,8 @@ class SmartApp : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@SmartApp)
-            modules(modules = modules)
+            modules(modules = modules + screenModelModule)
         }
-        Napier.base(DebugAntilog())
+        initializeLogger()
     }
 }

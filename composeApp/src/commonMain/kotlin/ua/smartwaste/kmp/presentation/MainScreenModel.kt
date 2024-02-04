@@ -1,19 +1,19 @@
 package ua.smartwaste.kmp.presentation
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
 import kotlinx.coroutines.launch
-import ua.smartwaste.kmp.domain.usecase.auth.LogOutUseCase
+import ua.gleb.smartwaste.domain.usecase.auth.LogOutUseCase
+import ua.smartwaste.kmp.presentation.core.modelScope
 
 /**
  * Created by gle.bushkaa email(gleb.mokryy@gmail.com) on 12/27/2023
  */
 
 class MainScreenModel(
-    private val logOutUseCase: LogOutUseCase,
+    private val logOutUseCase: ua.gleb.smartwaste.domain.usecase.auth.LogOutUseCase,
 ) : ScreenModel {
 
-    fun logOut() = screenModelScope.launch {
+    fun logOut() = modelScope.launch {
         logOutUseCase()
     }
 }

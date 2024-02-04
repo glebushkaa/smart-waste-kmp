@@ -2,7 +2,7 @@ package ua.smartwaste.kmp.presentation.screens.profile
 
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import ua.smartwaste.kmp.model.Quest
+import ua.gleb.smartwaste.model.Quest
 
 /**
  * Created by gle.bushkaa email(gleb.mokryy@gmail.com) on 12/26/2023

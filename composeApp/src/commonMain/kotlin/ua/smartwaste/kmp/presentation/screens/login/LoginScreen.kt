@@ -23,11 +23,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -39,6 +39,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -55,6 +56,7 @@ import ua.smartwaste.kmp.presentation.core.EIGHT_HUNDRED_MILLIS
 import ua.smartwaste.kmp.presentation.core.FOUR_HUNDRED_MILLIS
 import ua.smartwaste.kmp.presentation.core.ResourceType
 import ua.smartwaste.kmp.presentation.core.painterDrawableResource
+import ua.smartwaste.kmp.presentation.popup.SmartLoader
 import ua.smartwaste.kmp.presentation.screens.profile.ProfileScreen
 import ua.smartwaste.kmp.presentation.theme.SmartTheme
 
@@ -70,6 +72,10 @@ object LoginScreen : Screen {
         val screenModel = getScreenModel<LoginScreenModel>()
         val state by screenModel.state.collectAsState()
         val navigationEvent by screenModel.navigationEvent.collectAsState(null)
+
+        if (state.loaderVisible) {
+            SmartLoader()
+        }
 
         LoginScreenContent(
             state = state,
@@ -319,7 +325,10 @@ fun LoginTextField(
         placeholder = {
             Text(
                 text = placeholder,
-                style = SmartTheme.typography.titleMedium,
+                style = SmartTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                color = SmartTheme.palette.onSurface.copy(
+                    alpha = PLACEHOLDER_TEXT_ALPHA,
+                ),
             )
         },
         trailingIcon = {
@@ -338,16 +347,17 @@ fun LoginTextField(
         textStyle = SmartTheme.typography.titleMedium.copy(
             fontWeight = FontWeight.Bold,
         ),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
+        colors = TextFieldDefaults.colors(
             cursorColor = SmartTheme.palette.onSurface,
-            textColor = SmartTheme.palette.onSurface,
-            focusedBorderColor = SmartTheme.palette.primary,
-            unfocusedBorderColor = SmartTheme.palette.surface,
-            backgroundColor = SmartTheme.palette.surface,
-            errorBorderColor = SmartTheme.palette.error,
-            placeholderColor = SmartTheme.palette.onSurface.copy(
-                alpha = PLACEHOLDER_TEXT_ALPHA,
-            ),
+            focusedTextColor = SmartTheme.palette.onSurface,
+            unfocusedTextColor = SmartTheme.palette.onSurface,
+            errorTextColor = SmartTheme.palette.onSurface,
+            focusedContainerColor = SmartTheme.palette.surface,
+            unfocusedContainerColor = SmartTheme.palette.surface,
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedIndicatorColor = SmartTheme.palette.primary,
+            errorIndicatorColor = SmartTheme.palette.error,
+            errorContainerColor = SmartTheme.palette.error.copy(alpha = ERROR_CONTAINER_COLOR_ALPHA),
         ),
         shape = SmartTheme.shape.huge,
     )
@@ -452,3 +462,4 @@ private const val LOGIN_LINK_TEXT_COLOR_ALPHA = 0.6f
 private const val MAX_QUERY_LENGTH = 100
 
 private const val PLACEHOLDER_TEXT_ALPHA = 0.6f
+private const val ERROR_CONTAINER_COLOR_ALPHA = 0.1f
