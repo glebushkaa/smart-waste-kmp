@@ -7,19 +7,15 @@ import ua.gleb.smartwaste.network.api.user.model.NetworkUser
  * Created by gle.bushkaa email(gleb.mokryy@gmail.com) on 12/26/2023
  */
 
-fun NetworkUser.toUser(
-    days: Int,
-    requiredProgress: Int,
-): User {
-    val score = score ?: 0
+fun NetworkUser.toUser(): User {
     return User(
         id = id ?: "",
         email = email ?: "",
         username = username ?: "",
-        level = score / requiredProgress,
-        currentProgress = score % requiredProgress,
-        requiredProgress = requiredProgress,
+        level = level ?: 0,
+        currentProgress = progress ?: 0,
+        requiredProgress = requiredProgress ?: 500,
         buckets = buckets ?: 0,
-        days = days,
+        days = days ?: 0,
     )
 }

@@ -13,11 +13,11 @@ import ua.gleb.smartwaste.network.api.auth.model.AuthResponse
  */
 
 class AuthRepositoryImpl(
-    private val authApi: ua.gleb.smartwaste.network.api.auth.AuthApi,
-) : ua.gleb.smartwaste.domain.repository.AuthRepository {
+    private val authApi: AuthApi,
+) : AuthRepository {
 
     override suspend fun login(email: String, password: String): String {
-        val response: ua.gleb.smartwaste.network.api.auth.model.AuthResponse
+        val response: AuthResponse
         try {
             response = authApi.login(email, password)
         } catch (exception: ResponseException) {
@@ -25,7 +25,7 @@ class AuthRepositoryImpl(
             throw getLoginException(errorResponse.value.toString(), exception.message)
         }
         return response.accessToken ?: run {
-            val exception = ua.gleb.smartwaste.domain.exception.AuthException(
+            val exception = AuthException(
                 code = LOGIN_EXCEPTION,
                 message = response.message ?: "Unknown error",
             )
@@ -34,7 +34,7 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun register(username: String, email: String, password: String): String {
-        val response: ua.gleb.smartwaste.network.api.auth.model.AuthResponse
+        val response: AuthResponse
         try {
             response = authApi.register(username, email, password)
         } catch (exception: ResponseException) {
@@ -42,7 +42,7 @@ class AuthRepositoryImpl(
             throw getLoginException(errorResponse.value.toString(), exception.message)
         }
         return response.accessToken ?: run {
-            val exception = ua.gleb.smartwaste.domain.exception.AuthException(
+            val exception = AuthException(
                 code = REGISTER_EXCEPTION,
                 message = response.message ?: "Unknown error",
             )
@@ -51,27 +51,27 @@ class AuthRepositoryImpl(
     }
 
     private fun getLoginException(code: String, message: String?) = when (code) {
-        PASSWORD_IS_NOT_VALID -> ua.gleb.smartwaste.domain.exception.LoginException(
-            field = ua.gleb.smartwaste.domain.exception.LoginField.PASSWORD,
+        PASSWORD_IS_NOT_VALID -> LoginException(
+            field = LoginField.PASSWORD,
             message = message ?: "Invalid password",
         )
 
-        USER_NOT_FOUND -> ua.gleb.smartwaste.domain.exception.LoginException(
-            field = ua.gleb.smartwaste.domain.exception.LoginField.EMAIL,
+        USER_NOT_FOUND -> LoginException(
+            field = LoginField.EMAIL,
             message = message ?: "User not found",
         )
 
-        EMAIL_NOT_UNIQUE -> ua.gleb.smartwaste.domain.exception.LoginException(
-            field = ua.gleb.smartwaste.domain.exception.LoginField.EMAIL,
+        EMAIL_NOT_UNIQUE -> LoginException(
+            field = LoginField.EMAIL,
             message = message ?: "Email is already taken",
         )
 
-        USERNAME_NOT_UNIQUE -> ua.gleb.smartwaste.domain.exception.LoginException(
-            field = ua.gleb.smartwaste.domain.exception.LoginField.USERNAME,
+        USERNAME_NOT_UNIQUE -> LoginException(
+            field = LoginField.USERNAME,
             message = message ?: "Username is already taken",
         )
 
-        else -> ua.gleb.smartwaste.domain.exception.LoginException(
+        else -> LoginException(
             message = message ?: "Unknown error"
         )
     }

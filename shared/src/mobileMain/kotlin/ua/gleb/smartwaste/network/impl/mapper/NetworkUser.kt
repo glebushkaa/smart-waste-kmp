@@ -7,13 +7,15 @@ import ua.gleb.smartwaste.network.user.dto.NetworkUserDto
  * Created by gle.bushkaa email(gleb.mokryy@gmail.com) on 12/26/2023
  */
 
-fun NetworkUserDto.toUser() = NetworkUser(
+fun NetworkUserDto.toNetworkUser() = NetworkUser(
     id = id,
     username = username,
     email = email,
-    score = score,
+    progress = progress,
+    requiredProgress = requiredProgress,
+    level = level,
     buckets = buckets,
-    createdAt = createdAt,
+    days = days,
     message = message,
     code = code,
 )

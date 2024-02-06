@@ -13,6 +13,8 @@ data class NetworkUserDto(
     @SerialName("email") val email: String? = null,
     @SerialName("username") val username: String? = null,
     @SerialName("level") val level: Int? = null,
+    @SerialName("progress") val progress: Int? = null,
+    @SerialName("requiredProgress") val requiredProgress: Int? = null,
     @SerialName("days") val days: Int? = null,
     @SerialName("buckets") val buckets: Int? = null,
     @SerialName("message") val message: String? = null,

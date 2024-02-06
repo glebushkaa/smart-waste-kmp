@@ -33,14 +33,14 @@ object TokenManager {
             .build()
     }
 
-    fun generateToken(email: String): String? {
+    fun generateToken(id: String): String? {
         val publicKey = jwkProvider?.get("6f8856ed-9189-488f-9011-0ff4b6c08edc")?.publicKey
         val keySpecPKCS8 = PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKey))
         val privateKey = KeyFactory.getInstance("RSA").generatePrivate(keySpecPKCS8)
         return JWT.create()
             .withAudience(audience)
             .withIssuer(issuer)
-            .withClaim("email", email)
+            .withClaim("id", id)
             .withExpiresAt(Date(System.currentTimeMillis() + 120000))
             .sign(Algorithm.RSA256(publicKey as RSAPublicKey, privateKey as RSAPrivateKey))
     }

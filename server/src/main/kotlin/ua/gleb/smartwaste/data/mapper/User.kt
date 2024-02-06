@@ -10,30 +10,37 @@ fun toUserEntity(row: ResultRow) = UserEntity(
     id = row[UserTable.id].toString(),
     username = row[UserTable.name],
     email = row[UserTable.email],
-    level = row[UserTable.level],
-    currentProgress = row[UserTable.currentProgress],
+    progress = row[UserTable.progress],
     requiredProgress = row[UserTable.requiredProgress],
     createdAt = row[UserTable.createdAt],
     buckets = row[UserTable.buckets]
 )
 
-fun UserEntity.toUser(days: Int) = User(
-    id = this.id ?: "",
-    username = this.username ?: "",
-    email = this.email ?: "",
-    level = this.level ?: 0,
-    currentProgress = this.currentProgress ?: 0,
-    requiredProgress = this.requiredProgress ?: 500,
-    days = days,
-    buckets = this.buckets ?: 0
-)
+fun UserEntity.toUser(days: Int): User {
+    val progress = (this.progress ?: 0)
+    val requiredProgress = (this.requiredProgress ?: 500)
+    val level = progress / requiredProgress
+    val completedProgressToNextLevel = progress % requiredProgress
+    return User(
+        id = this.id ?: "",
+        username = this.username ?: "",
+        email = this.email ?: "",
+        level = level,
+        currentProgress = completedProgressToNextLevel,
+        requiredProgress = requiredProgress,
+        days = days,
+        buckets = this.buckets ?: 0
+    )
+}
 
-fun User.toNetworkUser(): NetworkUserDto {
+fun User.toNetworkUserDto(): NetworkUserDto {
     return NetworkUserDto(
         id = this.id,
         email = this.email,
         username = this.username,
         level = this.level,
+        progress = this.currentProgress,
+        requiredProgress = this.requiredProgress,
         days = this.days,
         buckets = this.buckets,
     )

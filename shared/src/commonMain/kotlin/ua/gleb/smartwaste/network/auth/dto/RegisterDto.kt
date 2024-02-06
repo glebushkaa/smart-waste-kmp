@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RegisterDto(
-    @SerialName("username") val username: String,
+    @SerialName("name") val username: String,
     @SerialName("email") val email: String,
     @SerialName("password") val password: String,
 )

@@ -9,7 +9,7 @@ import ua.gleb.smartwaste.network.api.user.model.NetworkUser
 
 interface UserApi {
 
-    suspend fun getUser(): ua.gleb.smartwaste.network.api.user.model.NetworkUser
+    suspend fun getUser(): NetworkUser
 
-    suspend fun getQuests(): List<ua.gleb.smartwaste.network.api.user.model.NetworkQuest>
+    suspend fun getQuests(): List<NetworkQuest>
 }

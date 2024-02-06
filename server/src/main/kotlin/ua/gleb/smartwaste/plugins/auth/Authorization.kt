@@ -20,7 +20,7 @@ fun Application.configureAuthorization() {
                 verifier(provider, issuer ?: "") { acceptLeeway(3) }
             }
             validate { credential ->
-                if (credential.payload.getClaim("email").asString() != "") {
+                if (credential.payload.getClaim("id").asString() != "") {
                     JWTPrincipal(credential.payload)
                 } else {
                     null

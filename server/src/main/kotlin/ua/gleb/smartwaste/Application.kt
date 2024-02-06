@@ -13,7 +13,6 @@ import ua.gleb.smartwaste.plugins.auth.configureAuthorization
 import ua.gleb.smartwaste.plugins.configureRouting
 import ua.gleb.smartwaste.plugins.configureSerialization
 
-
 fun main() {
     embeddedServer(
         Netty,

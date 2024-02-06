@@ -14,9 +14,10 @@ import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import ua.gleb.smartwaste.core.BASE_URL
-import ua.gleb.smartwaste.core.Routes
 import ua.gleb.smartwaste.core.SERVER_PORT
+import ua.gleb.smartwaste.network.Routes
 import ua.gleb.smartwaste.network.api.auth.AuthApi
+import ua.gleb.smartwaste.network.api.items.ItemsApi
 import ua.gleb.smartwaste.network.api.user.UserApi
 import ua.gleb.smartwaste.network.impl.auth.AuthApiImpl
 import ua.gleb.smartwaste.network.impl.items.ItemsApiImpl
@@ -39,17 +40,16 @@ val networkModule = module {
     singleItemsApi()
 }
 
-
 private fun Module.singleItemsApi() {
     single<HttpClient>(named(ITEMS_HTTP_CLIENT)) {
         val authPreferences = get<AuthPreferences>()
         buildHttpClient {
-            val token = authPreferences.token ?: ""
+            val token = "Bearer ${authPreferences.token ?: ""}"
             contentType(ContentType.Application.Json)
             header(HttpHeaders.Authorization, token)
         }
     }
-    single<ua.gleb.smartwaste.network.api.items.ItemsApi> {
+    single<ItemsApi> {
         ItemsApiImpl(
             itemsHttpClient = get(named(ITEMS_HTTP_CLIENT)),
             fileUploader = get()
@@ -61,7 +61,7 @@ private fun Module.singleUserApi() {
     single<HttpClient>(named(USER_HTTP_CLIENT)) {
         val authPreferences = get<AuthPreferences>()
         buildHttpClient(additionalPath = Routes.USER.route) {
-            val token = authPreferences.token ?: ""
+            val token = "Bearer ${authPreferences.token ?: ""}"
             contentType(ContentType.Application.Json)
             header(HttpHeaders.Authorization, token)
         }

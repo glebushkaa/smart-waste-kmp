@@ -5,6 +5,7 @@ import ua.gleb.smartwaste.core.mapToImmutable
 import ua.gleb.smartwaste.data.mapper.toQuest
 import ua.gleb.smartwaste.data.mapper.toUser
 import ua.gleb.smartwaste.domain.exception.AuthException
+import ua.gleb.smartwaste.domain.repository.UserRepository
 import ua.gleb.smartwaste.model.Quest
 import ua.gleb.smartwaste.model.User
 import ua.gleb.smartwaste.network.api.user.UserApi
@@ -15,7 +16,7 @@ import ua.gleb.smartwaste.network.api.user.UserApi
 
 class UserRepositoryImpl(
     private val userApi: UserApi,
-) : ua.gleb.smartwaste.domain.repository.UserRepository {
+) : UserRepository {
 
     override suspend fun getQuests(): ImmutableList<Quest> {
         return userApi.getQuests().mapToImmutable { it.toQuest() }
@@ -30,16 +31,11 @@ class UserRepositoryImpl(
             )
             throw exception
         }
-        val days = 0
-        return response.toUser(
-            days = days,
-            requiredProgress = REQUIRED_LEVEL_PROGRESS,
-        )
+        return response.toUser()
     }
 
 
     private companion object {
         private const val GET_USER_EXCEPTION = 300
-        private const val REQUIRED_LEVEL_PROGRESS = 500
     }
 }

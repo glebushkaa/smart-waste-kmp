@@ -109,6 +109,8 @@ exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datet
 exposed-json = { module = "org.jetbrains.exposed:exposed-json", version.ref = "exposed" }
 h2-database = { module = "com.h2database:h2", version.ref = "h2_version" }
 
+kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+
 [plugins]
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }

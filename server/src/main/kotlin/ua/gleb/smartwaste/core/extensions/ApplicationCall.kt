@@ -7,9 +7,11 @@ import ua.gleb.smartwaste.domain.exception.MissingParamException
 
 suspend fun ApplicationCall.getParamOrThrow(params: Parameters, query: String): String {
     return params[query] ?: run {
-        respondText(
-            "Missing $query",
-            status = HttpStatusCode.BadRequest
+        respond(
+            status = HttpStatusCode.BadRequest,
+            message = hashMapOf(
+                "message" to "Missing $query"
+            )
         )
         throw MissingParamException("Missing $query")
     }

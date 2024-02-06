@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AuthResponseDto(
-    @SerialName("accessToken") val accessToken: String? = null,
+    @SerialName("token") val accessToken: String? = null,
     @SerialName("code") val code: String? = null,
     @SerialName("message") val message: String? = null,
 )
