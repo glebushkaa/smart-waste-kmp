@@ -1,25 +1,27 @@
-package ua.gleb.smartwaste.data.repository.login
+package ua.gleb.smartwaste.data.repository
 
 import io.ktor.http.*
 import kotlinx.datetime.Clock
+import ua.gleb.smartwaste.domain.result.LoginResult
 import ua.gleb.smartwaste.database.user.UserDao
 import ua.gleb.smartwaste.domain.exception.LoginException
+import ua.gleb.smartwaste.domain.repository.LoginRepository
 
 class LoginRepositoryImpl(
     private val userDao: UserDao
 ) : LoginRepository {
 
     override suspend fun login(email: String, password: String): LoginResult {
-        val savedPassword = userDao.getPassword(email) ?: run {
+        val user = userDao.getUserByEmail(email) ?: run {
             val throwable = LoginException("User not found", HttpStatusCode.NotFound)
             return LoginResult.Failure(throwable)
         }
         val passwordHash = password.hashCode().toString()
-        if (passwordHash != savedPassword) {
+        if (passwordHash != user.password) {
             val throwable = LoginException("Password is not correct", HttpStatusCode.Unauthorized)
             return LoginResult.Failure(throwable)
         }
-        val id = userDao.getIdByEmail(email) ?: run {
+        val id = user.id ?: run {
             val throwable = LoginException("id is null", HttpStatusCode.NotFound)
             return LoginResult.Failure(throwable)
         }

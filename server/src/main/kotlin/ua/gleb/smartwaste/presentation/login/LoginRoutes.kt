@@ -1,4 +1,4 @@
-package ua.gleb.smartwaste.routes
+package ua.gleb.smartwaste.presentation.login
 
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -6,8 +6,10 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
-import ua.gleb.smartwaste.data.repository.login.LoginRepository
-import ua.gleb.smartwaste.data.repository.login.LoginResult
+import ua.gleb.smartwaste.data.network.response.ErrorResponse
+import ua.gleb.smartwaste.data.network.response.TokenResponse
+import ua.gleb.smartwaste.domain.repository.LoginRepository
+import ua.gleb.smartwaste.domain.result.LoginResult
 import ua.gleb.smartwaste.network.AuthRoutes
 import ua.gleb.smartwaste.network.Routes
 import ua.gleb.smartwaste.network.auth.dto.LoginDto
@@ -34,8 +36,8 @@ private fun Route.signUpRoute(
             }
 
             is LoginResult.Success -> {
-                val token = generateToken(result.id)
-                call.respond(HttpStatusCode.Created, hashMapOf("token" to token))
+                val token = call.generateToken(result)
+                call.respond(HttpStatusCode.Created, TokenResponse(token))
             }
         }
     }
@@ -53,17 +55,28 @@ private fun Route.signInRoute(
             }
 
             is LoginResult.Success -> {
-                val token = generateToken(result.id)
-                call.respond(HttpStatusCode.Created, hashMapOf("token" to token))
+                val token = call.generateToken(result)
+                call.respond(HttpStatusCode.Created, TokenResponse(token))
             }
         }
+    }
+}
+
+private suspend fun ApplicationCall.generateToken(result: LoginResult.Success): String {
+    return generateToken(result.id) ?: run {
+        val throwable = Throwable("token is null")
+        respond(
+            status = HttpStatusCode.UnprocessableEntity,
+            message = ErrorResponse(throwable.message ?: "")
+        )
+        throw throwable
     }
 }
 
 private suspend fun ApplicationCall.handleFailureLoginResult(result: LoginResult.Failure) {
     respond(
         result.throwable.statusCode,
-        hashMapOf("message" to result.throwable.message),
+        ErrorResponse(result.throwable.message)
     )
     throw result.throwable
 }

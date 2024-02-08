@@ -9,6 +9,7 @@ import ua.gleb.smartwaste.network.user.dto.NetworkUserDto
 fun toUserEntity(row: ResultRow) = UserEntity(
     id = row[UserTable.id].toString(),
     username = row[UserTable.name],
+    password = row[UserTable.password],
     email = row[UserTable.email],
     progress = row[UserTable.progress],
     requiredProgress = row[UserTable.requiredProgress],

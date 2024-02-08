@@ -41,7 +41,7 @@ object TokenManager {
             .withAudience(audience)
             .withIssuer(issuer)
             .withClaim("id", id)
-            .withExpiresAt(Date(System.currentTimeMillis() + 120000))
+            .withExpiresAt(Date(System.currentTimeMillis() + 120000000))
             .sign(Algorithm.RSA256(publicKey as RSAPublicKey, privateKey as RSAPrivateKey))
     }
 }

@@ -1,7 +1,5 @@
 package ua.gleb.smartwaste.database.user
 
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import ua.gleb.smartwaste.data.mapper.toUserEntity
@@ -31,18 +29,10 @@ class UserDaoImpl : UserDao {
             .singleOrNull()
     }
 
-
-    override suspend fun getPassword(email: String): String? = dbQuery {
-        return@dbQuery UserTable.select(UserTable.password)
-            .where(UserTable.email eq email)
-            .map { it[UserTable.password] }
-            .singleOrNull()
-    }
-
-    override suspend fun getIdByEmail(email: String): String? = dbQuery {
-        return@dbQuery UserTable.select(UserTable.id)
-            .where(UserTable.email eq email)
-            .map { it[UserTable.id].toString() }
+    override suspend fun getUserByEmail(email: String): UserEntity? = dbQuery {
+        UserTable.selectAll()
+            .where { UserTable.email eq email }
+            .map(::toUserEntity)
             .singleOrNull()
     }
 
@@ -61,10 +51,5 @@ class UserDaoImpl : UserDao {
             table[this.createdAt] = createdAt
             table[buckets] = 0
         }.resultedValues?.map(::toUserEntity)?.singleOrNull()
-    }
-
-    override suspend fun deleteAllUsers() = dbQuery {
-        UserTable.deleteAll()
-        return@dbQuery
     }
 }

@@ -4,6 +4,7 @@ data class UserEntity(
     val id: String? = null,
     val username: String? = null,
     val email: String? = null,
+    val password: String? = null,
     val progress: Int? = null,
     val requiredProgress: Int? = null,
     val createdAt: String? = null,

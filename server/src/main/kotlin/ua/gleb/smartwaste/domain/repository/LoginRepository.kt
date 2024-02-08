@@ -1,4 +1,6 @@
-package ua.gleb.smartwaste.data.repository.login
+package ua.gleb.smartwaste.domain.repository
+
+import ua.gleb.smartwaste.domain.result.LoginResult
 
 interface LoginRepository {
 

@@ -1,4 +1,4 @@
-package ua.gleb.smartwaste.data.repository.login
+package ua.gleb.smartwaste.domain.result
 
 import ua.gleb.smartwaste.domain.exception.LoginException
 

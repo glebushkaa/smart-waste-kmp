@@ -11,15 +11,7 @@ interface UserDao {
 
     suspend fun getUser(id: UUID): UserEntity?
 
-    suspend fun getPassword(email: String): String?
-
-    suspend fun getIdByEmail(email: String): String?
+    suspend fun getUserByEmail(email: String): UserEntity?
 
     suspend fun register(name: String, email: String, password: String, createdAt: String): UserEntity?
-
-
-    /**
-     * Remove this function
-     */
-    suspend fun deleteAllUsers()
 }
