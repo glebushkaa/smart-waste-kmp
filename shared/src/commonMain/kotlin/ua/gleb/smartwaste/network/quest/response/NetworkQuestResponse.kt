@@ -1,4 +1,4 @@
-package ua.gleb.smartwaste.network.user.dto
+package ua.gleb.smartwaste.network.quest.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -8,12 +8,12 @@ import kotlinx.serialization.Serializable
  */
 
 @Serializable
-data class NetworkQuestsListDto(
-    @SerialName("quests") val quests: List<NetworkQuestDto> = emptyList(),
+data class NetworkQuestsListResponse(
+    @SerialName("quests") val quests: List<NetworkQuestResponse> = emptyList(),
 )
 
 @Serializable
-data class NetworkQuestDto(
+data class NetworkQuestResponse(
     @SerialName("id") val id: Long? = null,
     @SerialName("name") val name: String? = null,
     @SerialName("total") val total: Int = 0,

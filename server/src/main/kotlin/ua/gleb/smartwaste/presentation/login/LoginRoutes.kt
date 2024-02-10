@@ -6,14 +6,14 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
-import ua.gleb.smartwaste.data.network.response.ErrorResponse
-import ua.gleb.smartwaste.data.network.response.TokenResponse
+import ua.gleb.smartwaste.network.auth.response.ErrorResponse
+import ua.gleb.smartwaste.network.auth.response.TokenResponse
 import ua.gleb.smartwaste.domain.repository.LoginRepository
 import ua.gleb.smartwaste.domain.result.LoginResult
 import ua.gleb.smartwaste.network.AuthRoutes
 import ua.gleb.smartwaste.network.Routes
-import ua.gleb.smartwaste.network.auth.dto.LoginDto
-import ua.gleb.smartwaste.network.auth.dto.RegisterDto
+import ua.gleb.smartwaste.network.auth.request.LoginRequest
+import ua.gleb.smartwaste.network.auth.request.RegisterRequest
 import ua.gleb.smartwaste.plugins.auth.TokenManager.generateToken
 
 fun Routing.loginRoute() {
@@ -28,7 +28,7 @@ private fun Route.signUpRoute(
     loginRepository: LoginRepository
 ) {
     post(AuthRoutes.SIGN_UP.route) {
-        val params = call.receive<RegisterDto>()
+        val params = call.receive<RegisterRequest>()
         val result = loginRepository.register(params.username, params.email, params.password)
         when (result) {
             is LoginResult.Failure -> {
@@ -47,7 +47,7 @@ private fun Route.signInRoute(
     loginRepository: LoginRepository
 ) {
     post(AuthRoutes.SIGN_IN.route) {
-        val params = call.receive<LoginDto>()
+        val params = call.receive<LoginRequest>()
         val result = loginRepository.login(params.email, params.password)
         when (result) {
             is LoginResult.Failure -> {

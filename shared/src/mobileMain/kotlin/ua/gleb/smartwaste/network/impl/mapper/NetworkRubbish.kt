@@ -1,27 +1,22 @@
 package ua.gleb.smartwaste.network.impl.mapper
 
 import ua.gleb.smartwaste.network.api.items.model.NetworkRubbish
-import ua.gleb.smartwaste.network.items.dto.NetworkRubbishDto
+import ua.gleb.smartwaste.network.rubbish.response.NetworkRubbishResponse
+import ua.gleb.smartwaste.network.rubbish.response.NetworkRubbishListResponse
 
 /**
  * Created by gle.bushkaa email(gleb.mokryy@gmail.com) on 12/27/2023
  */
 
-fun NetworkRubbishDto.toNetworkRubbish(): NetworkRubbish {
-    return NetworkRubbish(
-        id = id,
-        name = name,
-        categories = categories.map {
-            it.toNetworkCategory()
-        },
-    )
+
+fun NetworkRubbishListResponse.toNetworkRubbishList(): List<NetworkRubbish> {
+    return rubbishes.map { it.toNetworkRubbish() }
 }
 
-fun NetworkRubbishDto.NetworkCategoryDto.toNetworkCategory(): NetworkRubbish.NetworkCategory {
-    return NetworkRubbish.NetworkCategory(
-        id = id,
-        name = name,
-        slug = slug,
-        icon = icon,
+fun NetworkRubbishResponse.toNetworkRubbish(): NetworkRubbish {
+    return NetworkRubbish(
+        id = this.id,
+        title = this.title,
+        emoji = this.emoji
     )
 }

@@ -11,6 +11,7 @@ fun Rubbish.toRubbishEntity(): RubbishEntity {
     return RubbishEntity(
         id = this.id,
         name = this.name,
-        count = this.count.toInt()
+        count = this.count.toInt(),
+        emoji = this.emoji
     )
 }

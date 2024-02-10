@@ -1,6 +1,5 @@
 package ua.gleb.smartwaste.domain.usecase.items
 
-import ua.gleb.smartwaste.domain.repository.ItemsRepository
 import ua.gleb.smartwaste.domain.usecase.core.ResultUseCase
 import ua.gleb.smartwaste.domain.usecase.core.UseCase
 import ua.gleb.smartwaste.domain.usecase.core.UseCaseLogger
@@ -11,12 +10,12 @@ import ua.gleb.smartwaste.model.Rubbish
  */
 
 class ScanItemUseCase(
-    private val itemsRepository: ua.gleb.smartwaste.domain.repository.ItemsRepository,
+    private val rubbishRepository: ua.gleb.smartwaste.domain.repository.RubbishRepository,
     useCaseLogger: UseCaseLogger
 ) : ResultUseCase<Rubbish, ScanItemUseCase.Params>(useCaseLogger) {
 
     override suspend fun invoke(params: Params) = runCatching {
-        val item = itemsRepository.scanItem(params.filePath)
+        val item = rubbishRepository.scanItem(params.filePath)
         return@runCatching item ?: throw NullPointerException()
     }
 

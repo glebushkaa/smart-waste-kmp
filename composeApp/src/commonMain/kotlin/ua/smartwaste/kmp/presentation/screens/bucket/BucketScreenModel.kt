@@ -86,7 +86,7 @@ class BucketScreenModel(
     private fun selectRubbish(rubbish: Rubbish) {
         val popupState = mutableState.value.rubbishPopupState.copy(
             rubbishId = rubbish.id,
-            rubbishName = rubbish.name
+            rubbishName = rubbish.title
         )
         mutableState.update { state ->
             state.copy(rubbishPopupState = popupState)

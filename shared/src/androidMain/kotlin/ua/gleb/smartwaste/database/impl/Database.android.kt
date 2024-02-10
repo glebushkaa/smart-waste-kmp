@@ -1,9 +1,9 @@
 package ua.gleb.smartwaste.database.impl
 
 import android.content.Context
+import smartwaste.rubbish.SmartDatabase
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
-import smartwaste.rubbish.SmartDatabase
 
 /**
  * Created by gle.bushkaa email(gleb.mokryy@gmail.com) on 12/31/2023

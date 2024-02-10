@@ -1,4 +1,4 @@
-package ua.gleb.smartwaste.network.auth.dto
+package ua.gleb.smartwaste.network.auth.request
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -8,7 +8,8 @@ import kotlinx.serialization.Serializable
  */
 
 @Serializable
-data class LoginDto(
+data class RegisterRequest(
+    @SerialName("name") val username: String,
     @SerialName("email") val email: String,
     @SerialName("password") val password: String,
 )

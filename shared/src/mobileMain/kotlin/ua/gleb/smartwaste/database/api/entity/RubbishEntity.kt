@@ -7,5 +7,6 @@ package ua.gleb.smartwaste.database.api.entity
 data class RubbishEntity(
     val id: Long,
     val name: String,
-    val count: Int
+    val count: Int,
+    val emoji: String
 )

@@ -6,8 +6,8 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import smartwaste.rubbish.RubbishQueries
 import smartwaste.rubbish.SmartDatabase
-import ua.gleb.smartwaste.database.api.ItemsDatabase
-import ua.gleb.smartwaste.database.impl.ItemsDatabaseImpl
+import ua.gleb.smartwaste.database.api.RubbishDatabase
+import ua.gleb.smartwaste.database.impl.RubbishDatabaseImpl
 import ua.gleb.smartwaste.database.impl.DriverFactory
 import ua.gleb.smartwaste.database.impl.createDatabase
 
@@ -26,5 +26,5 @@ val databaseModule = module {
         database.rubbishQueries
     }
 
-    singleOf(::ItemsDatabaseImpl) bind ItemsDatabase::class
+    singleOf(::RubbishDatabaseImpl) bind RubbishDatabase::class
 }

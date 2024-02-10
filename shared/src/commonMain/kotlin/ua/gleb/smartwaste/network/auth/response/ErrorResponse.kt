@@ -1,4 +1,4 @@
-package ua.gleb.smartwaste.data.network.response
+package ua.gleb.smartwaste.network.auth.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

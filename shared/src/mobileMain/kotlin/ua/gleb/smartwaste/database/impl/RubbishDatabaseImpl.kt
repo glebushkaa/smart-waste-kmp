@@ -4,7 +4,7 @@ import app.cash.sqldelight.coroutines.asFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import smartwaste.rubbish.RubbishQueries
-import ua.gleb.smartwaste.database.api.ItemsDatabase
+import ua.gleb.smartwaste.database.api.RubbishDatabase
 import ua.gleb.smartwaste.database.api.entity.RubbishEntity
 import ua.gleb.smartwaste.database.impl.mapper.toRubbishEntity
 
@@ -12,15 +12,16 @@ import ua.gleb.smartwaste.database.impl.mapper.toRubbishEntity
  * Created by gle.bushkaa email(gleb.mokryy@gmail.com) on 12/31/2023
  */
 
-class ItemsDatabaseImpl(
+class RubbishDatabaseImpl(
     private val queries: RubbishQueries
-) : ItemsDatabase {
+) : RubbishDatabase {
 
     override fun insertRubbish(rubbishEntity: RubbishEntity) {
         queries.insertRubbish(
             id = rubbishEntity.id,
             name = rubbishEntity.name,
-            count = rubbishEntity.count.toLong()
+            count = rubbishEntity.count.toLong(),
+            emoji = rubbishEntity.emoji
         )
     }
 

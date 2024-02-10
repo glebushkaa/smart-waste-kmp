@@ -44,7 +44,7 @@ fun RubbishList(
         }
         items(
             items = rubbishList,
-            key = { item -> item.name },
+            key = { item -> item.title },
         ) { rubbish ->
             RubbishItem(
                 modifier = Modifier.animateItemPlacement(),

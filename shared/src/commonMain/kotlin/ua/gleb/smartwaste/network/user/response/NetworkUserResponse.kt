@@ -1,4 +1,4 @@
-package ua.gleb.smartwaste.network.user.dto
+package ua.gleb.smartwaste.network.user.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  */
 
 @Serializable
-data class NetworkUserDto(
+data class NetworkUserResponse(
     @SerialName("id") val id: String? = null,
     @SerialName("email") val email: String? = null,
     @SerialName("username") val username: String? = null,

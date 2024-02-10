@@ -7,9 +7,9 @@ import io.ktor.client.request.setBody
 import ua.gleb.smartwaste.network.AuthRoutes
 import ua.gleb.smartwaste.network.api.auth.AuthApi
 import ua.gleb.smartwaste.network.api.auth.model.AuthResponse
-import ua.gleb.smartwaste.network.auth.dto.AuthResponseDto
-import ua.gleb.smartwaste.network.auth.dto.LoginDto
-import ua.gleb.smartwaste.network.auth.dto.RegisterDto
+import ua.gleb.smartwaste.network.auth.request.LoginRequest
+import ua.gleb.smartwaste.network.auth.request.RegisterRequest
+import ua.gleb.smartwaste.network.auth.response.TokenResponse
 import ua.gleb.smartwaste.network.impl.mapper.toAuthResponse
 
 /**
@@ -25,9 +25,9 @@ class AuthApiImpl(
         password: String,
     ): AuthResponse {
         return authHttpClient.post(AuthRoutes.SIGN_IN.route) {
-            val loginDto = LoginDto(email = email, password = password)
+            val loginDto = LoginRequest(email = email, password = password)
             setBody(loginDto)
-        }.call.body<AuthResponseDto>().toAuthResponse()
+        }.call.body<TokenResponse>().toAuthResponse()
     }
 
     override suspend fun register(
@@ -36,8 +36,9 @@ class AuthApiImpl(
         password: String,
     ): AuthResponse {
         return authHttpClient.post(AuthRoutes.SIGN_UP.route) {
-            val registerDto = RegisterDto(username = username, email = email, password = password)
+            val registerDto =
+                RegisterRequest(username = username, email = email, password = password)
             setBody(registerDto)
-        }.call.body<AuthResponseDto>().toAuthResponse()
+        }.call.body<TokenResponse>().toAuthResponse()
     }
 }

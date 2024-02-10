@@ -17,10 +17,10 @@ import ua.gleb.smartwaste.core.BASE_URL
 import ua.gleb.smartwaste.core.SERVER_PORT
 import ua.gleb.smartwaste.network.Routes
 import ua.gleb.smartwaste.network.api.auth.AuthApi
-import ua.gleb.smartwaste.network.api.items.ItemsApi
+import ua.gleb.smartwaste.network.api.items.RubbishApi
 import ua.gleb.smartwaste.network.api.user.UserApi
 import ua.gleb.smartwaste.network.impl.auth.AuthApiImpl
-import ua.gleb.smartwaste.network.impl.items.ItemsApiImpl
+import ua.gleb.smartwaste.network.impl.items.RubbishApiImpl
 import ua.gleb.smartwaste.network.impl.plugins.configureLogging
 import ua.gleb.smartwaste.network.impl.plugins.configureSerialization
 import ua.gleb.smartwaste.network.impl.user.UserApiImpl
@@ -43,14 +43,14 @@ val networkModule = module {
 private fun Module.singleItemsApi() {
     single<HttpClient>(named(ITEMS_HTTP_CLIENT)) {
         val authPreferences = get<AuthPreferences>()
-        buildHttpClient {
+        buildHttpClient(additionalPath = Routes.RUBBISH.route) {
             val token = "Bearer ${authPreferences.token ?: ""}"
             contentType(ContentType.Application.Json)
             header(HttpHeaders.Authorization, token)
         }
     }
-    single<ItemsApi> {
-        ItemsApiImpl(
+    single<RubbishApi> {
+        RubbishApiImpl(
             itemsHttpClient = get(named(ITEMS_HTTP_CLIENT)),
             fileUploader = get()
         )

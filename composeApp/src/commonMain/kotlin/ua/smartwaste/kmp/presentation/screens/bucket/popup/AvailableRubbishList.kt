@@ -61,7 +61,7 @@ fun AvailableRubbishList(
                     modifier = Modifier.padding(
                         horizontal = SmartTheme.offset.width.regular,
                     ),
-                    text = it.name,
+                    text = it.title,
                     style = SmartTheme.typography.bodyLarge,
                     color = SmartTheme.palette.onBackground,
                 )
@@ -69,9 +69,7 @@ fun AvailableRubbishList(
         }
         item {
             Spacer(
-                modifier = Modifier.height(
-                    SmartTheme.offset.height.regular,
-                ),
+                modifier = Modifier.height(SmartTheme.offset.height.regular),
             )
         }
     }

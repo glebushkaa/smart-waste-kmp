@@ -5,8 +5,9 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
-import ua.gleb.smartwaste.database.quest.table.QuestTable
-import ua.gleb.smartwaste.database.quest.table.UserQuestTable
+import ua.gleb.smartwaste.database.quest.table.QuestsTable
+import ua.gleb.smartwaste.database.quest.table.UserQuestsTable
+import ua.gleb.smartwaste.database.rubbish.table.RubbishesTable
 import ua.gleb.smartwaste.database.user.table.UserTable
 
 object SmartWasteDatabase {
@@ -16,7 +17,7 @@ object SmartWasteDatabase {
         val jdbcURL = "jdbc:h2:file:./build/db"
         val database = Database.connect(jdbcURL, driverClassName)
         transaction(database) {
-            SchemaUtils.create(UserTable, QuestTable, UserQuestTable)
+            SchemaUtils.create(UserTable, QuestsTable, UserQuestsTable, RubbishesTable)
         }
     }
 

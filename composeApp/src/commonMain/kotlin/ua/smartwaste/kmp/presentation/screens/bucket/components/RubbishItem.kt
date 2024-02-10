@@ -39,7 +39,7 @@ fun RubbishItem(
             modifier = Modifier
                 .padding(horizontal = SmartTheme.offset.width.large)
                 .weight(1f),
-            text = item.name,
+            text = item.title,
             style = SmartTheme.typography.bodyLargeBold,
             color = SmartTheme.palette.onSurface,
             maxLines = 1,

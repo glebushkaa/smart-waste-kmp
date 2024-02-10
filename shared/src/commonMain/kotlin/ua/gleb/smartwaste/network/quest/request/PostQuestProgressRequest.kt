@@ -1,4 +1,4 @@
-package ua.gleb.smartwaste.data.network.request
+package ua.gleb.smartwaste.network.quest.request
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

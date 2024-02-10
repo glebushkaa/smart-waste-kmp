@@ -3,22 +3,22 @@ package ua.gleb.smartwaste.data.mapper
 import org.jetbrains.exposed.sql.ResultRow
 import ua.gleb.smartwaste.database.quest.entity.QuestEntity
 import ua.gleb.smartwaste.database.quest.entity.UserQuestEntity
-import ua.gleb.smartwaste.database.quest.table.QuestTable
-import ua.gleb.smartwaste.database.quest.table.UserQuestTable
+import ua.gleb.smartwaste.database.quest.table.QuestsTable
+import ua.gleb.smartwaste.database.quest.table.UserQuestsTable
 import ua.gleb.smartwaste.model.Quest
-import ua.gleb.smartwaste.network.user.dto.NetworkQuestDto
+import ua.gleb.smartwaste.network.quest.response.NetworkQuestResponse
 
 fun toQuestEntity(row: ResultRow) = QuestEntity(
-    id = row[QuestTable.id],
-    name = row[QuestTable.name],
-    requiredProgress = row[QuestTable.requiredProgress],
+    id = row[QuestsTable.id],
+    name = row[QuestsTable.name],
+    requiredProgress = row[QuestsTable.requiredProgress],
 )
 
 fun toUserQuestEntity(row: ResultRow) = UserQuestEntity(
-    id = row[QuestTable.id],
-    name = row[QuestTable.name],
-    requiredProgress = row[QuestTable.requiredProgress],
-    progress = row[UserQuestTable.progress]
+    id = row[QuestsTable.id],
+    name = row[QuestsTable.name],
+    requiredProgress = row[QuestsTable.requiredProgress],
+    progress = row[UserQuestsTable.progress]
 )
 
 fun QuestEntity.toQuest(): Quest {
@@ -30,8 +30,8 @@ fun QuestEntity.toQuest(): Quest {
     )
 }
 
-fun Quest.toNetworkQuestDto(): NetworkQuestDto {
-    return NetworkQuestDto(
+fun Quest.toNetworkQuestDto(): NetworkQuestResponse {
+    return NetworkQuestResponse(
         id = this.id,
         name = this.title,
         total = this.requiredProgress,

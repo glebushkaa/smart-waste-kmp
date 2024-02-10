@@ -9,8 +9,8 @@ import ua.gleb.smartwaste.network.api.user.model.NetworkQuest
 import ua.gleb.smartwaste.network.api.user.model.NetworkUser
 import ua.gleb.smartwaste.network.impl.mapper.toNetworkQuest
 import ua.gleb.smartwaste.network.impl.mapper.toNetworkUser
-import ua.gleb.smartwaste.network.user.dto.NetworkQuestsListDto
-import ua.gleb.smartwaste.network.user.dto.NetworkUserDto
+import ua.gleb.smartwaste.network.quest.response.NetworkQuestsListResponse
+import ua.gleb.smartwaste.network.user.response.NetworkUserResponse
 
 /**
  * Created by gle.bushkaa email(gleb.mokryy@gmail.com) on 12/25/2023
@@ -23,14 +23,14 @@ class UserApiImpl(
     override suspend fun getUser(): NetworkUser {
         return userHttpClient.get(UserRoutes.ME.route)
             .call
-            .body<NetworkUserDto>()
+            .body<NetworkUserResponse>()
             .toNetworkUser()
     }
 
     override suspend fun getQuests(): List<NetworkQuest> {
         return userHttpClient.get(UserRoutes.QUESTS.route)
             .call
-            .body<NetworkQuestsListDto>()
+            .body<NetworkQuestsListResponse>()
             .quests
             .map { it.toNetworkQuest() }
     }

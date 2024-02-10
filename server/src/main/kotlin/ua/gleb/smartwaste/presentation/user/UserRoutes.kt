@@ -10,13 +10,13 @@ import org.koin.ktor.ext.inject
 import ua.gleb.smartwaste.core.extensions.getIdFromToken
 import ua.gleb.smartwaste.data.mapper.toNetworkQuestDto
 import ua.gleb.smartwaste.data.mapper.toNetworkUserDto
-import ua.gleb.smartwaste.data.network.request.PostQuestProgressRequest
-import ua.gleb.smartwaste.data.network.response.ErrorResponse
+import ua.gleb.smartwaste.network.quest.request.PostQuestProgressRequest
+import ua.gleb.smartwaste.network.auth.response.ErrorResponse
 import ua.gleb.smartwaste.domain.repository.QuestRepository
 import ua.gleb.smartwaste.domain.repository.UserRepository
 import ua.gleb.smartwaste.network.Routes
 import ua.gleb.smartwaste.network.UserRoutes
-import ua.gleb.smartwaste.network.user.dto.NetworkQuestsListDto
+import ua.gleb.smartwaste.network.quest.response.NetworkQuestsListResponse
 import ua.gleb.smartwaste.plugins.auth.AUTH_JWT
 
 fun Routing.userRoute() {
@@ -49,7 +49,7 @@ private fun Route.getUserQuests(userRepository: UserRepository) {
             val quests = userRepository.getUserQuests(id)
                 .getOrDefault(emptyList())
                 .map { quest -> quest.toNetworkQuestDto() }
-            val questsDto = NetworkQuestsListDto(quests)
+            val questsDto = NetworkQuestsListResponse(quests)
             call.respond(HttpStatusCode.OK, questsDto)
         }
     }

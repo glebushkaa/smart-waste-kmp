@@ -4,7 +4,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import ua.gleb.smartwaste.database.user.entity.UserEntity
 import ua.gleb.smartwaste.database.user.table.UserTable
 import ua.gleb.smartwaste.model.User
-import ua.gleb.smartwaste.network.user.dto.NetworkUserDto
+import ua.gleb.smartwaste.network.user.response.NetworkUserResponse
 
 fun toUserEntity(row: ResultRow) = UserEntity(
     id = row[UserTable.id].toString(),
@@ -34,8 +34,8 @@ fun UserEntity.toUser(days: Int): User {
     )
 }
 
-fun User.toNetworkUserDto(): NetworkUserDto {
-    return NetworkUserDto(
+fun User.toNetworkUserDto(): NetworkUserResponse {
+    return NetworkUserResponse(
         id = this.id,
         email = this.email,
         username = this.username,

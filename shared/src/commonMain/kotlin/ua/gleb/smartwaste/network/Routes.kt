@@ -1,7 +1,7 @@
 package ua.gleb.smartwaste.network
 
 enum class Routes(val route: String) {
-    AUTH("auth"), USER("self"), QUEST("quest")
+    AUTH("auth"), USER("self"), QUEST("quest"), RUBBISH("rubbish")
 }
 
 enum class AuthRoutes(val route: String) {
@@ -14,4 +14,8 @@ enum class UserRoutes(val route: String) {
 
 enum class QuestRoutes(val route: String) {
     ALL("all")
+}
+
+enum class RubbishRoutes(val route: String) {
+    ALL("all"), NEW("new")
 }

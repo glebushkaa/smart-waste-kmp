@@ -1,6 +1,5 @@
 package ua.gleb.smartwaste.domain.usecase.items
 
-import ua.gleb.smartwaste.domain.repository.ItemsRepository
 import ua.gleb.smartwaste.domain.usecase.core.ResultUseCase
 import ua.gleb.smartwaste.domain.usecase.core.UseCase
 import ua.gleb.smartwaste.domain.usecase.core.UseCaseLogger
@@ -11,12 +10,12 @@ import ua.gleb.smartwaste.model.Rubbish
  */
 
 class AddRubbishUseCase(
-    private val itemsRepository: ua.gleb.smartwaste.domain.repository.ItemsRepository,
+    private val rubbishRepository: ua.gleb.smartwaste.domain.repository.RubbishRepository,
     useCaseLogger: UseCaseLogger
 ) : ResultUseCase<Unit, AddRubbishUseCase.Params>(useCaseLogger) {
 
     override suspend fun invoke(params: Params) = runCatching {
-        itemsRepository.addRubbish(params.rubbish)
+        rubbishRepository.addRubbish(params.rubbish)
     }
 
     data class Params(
